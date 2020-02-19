@@ -1,23 +1,21 @@
 # This program calculates the coordinates of the discrete aerodynamic loading
-# x = 0
 import csv
 import math
 Nz = 81
 Nx = 41
 Ca = 0.484  # m
 la = 1.691  # m
-####
+##
+# read the file first
 loading = []
 with open('aerodynamicloadcrj700.dat') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     # line_count = 0
     for row in csv_reader:
         loading.append(row)
-    # print(f'Processed {line_count} lines.')
-print(loading)
-print(len(loading))
-print(len(loading[0]))
-coordinates = []
+
+
+# calculate coordinates and append to dictionary as  d[x] = [(z, load),(z, load), etc]
 d = dict()
 
 for j in range(1, Nx + 1):
@@ -32,6 +30,5 @@ for j in range(1, Nx + 1):
             d[x].append((z, loading[i - 1][j - 1]))
         else:
             d[x] = [(z, loading[i - 1][j - 1])]
-        # coordinates.append((x, z))
-print(d)
+
 # dictionary x -> (z, load)
