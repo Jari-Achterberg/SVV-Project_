@@ -1,6 +1,6 @@
 # Making the integration_scheme
 
-from Integration import d
+from Coordinates import d
 # Input variables
 x1 = 4
 x2 = 6
