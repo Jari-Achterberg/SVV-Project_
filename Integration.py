@@ -1,4 +1,4 @@
-# this program calculates the integration and interpolation schemes
+# This program calculates the coordinates of the discrete aerodynamic loading
 # x = 0
 import csv
 import math
