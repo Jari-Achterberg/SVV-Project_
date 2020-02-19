@@ -3,3 +3,4 @@
 import csv
 import math
 theta_z = i - 1 / Nz * math.pi
+
