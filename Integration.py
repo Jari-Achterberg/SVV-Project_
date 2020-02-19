@@ -23,6 +23,7 @@ len(loading[0])      # Check if equal to Nx
 # calculate coordinates and append to dictionary as  d[x] = [(z, load),(z, load), etc]
 d = dict()
 index = 0
+
 for j in range(1, Nx + 1):
     theta_xi = (j - 1) / Nz * math.pi
     theta_xi_next = j / Nz * math.pi
