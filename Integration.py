@@ -14,3 +14,4 @@ with open('aerodynamicloadcrj700.dat') as csv_file:
         loading.append(row)
     # print(f'Processed {line_count} lines.')
 print(loading)
+#
