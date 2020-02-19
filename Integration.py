@@ -22,7 +22,7 @@ len(loading[0])      # Check if equal to Nx
 
 # calculate coordinates and append to dictionary as  d[x] = [(z, load),(z, load), etc]
 d = dict()
-
+index = 0
 for j in range(1, Nx + 1):
     theta_xi = (j - 1) / Nz * math.pi
     theta_xi_next = j / Nz * math.pi
@@ -32,8 +32,9 @@ for j in range(1, Nx + 1):
         theta_zi_next = i / Nz * math.pi
         z = - 0.5 * ((Ca / 2) * (1 - math.cos(theta_zi)) + (Ca / 2) * (1 - math.cos(theta_zi_next)))
         if x in d:
-            d[x].append((z, loading[i - 1][j - 1]))
+            d[index].append((x, z, loading[i - 1][j - 1]))
         else:
-            d[x] = [(z, loading[i - 1][j - 1])]
+            d[index] = [(x, z, loading[i - 1][j - 1])]
+        index += 1
 
 # dictionary x -> (z, load)
