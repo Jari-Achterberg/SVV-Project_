@@ -1,10 +1,13 @@
 # This program calculates the coordinates of the discrete aerodynamic loading
 import csv
 import math
+
+# Input variables
 Nz = 81
 Nx = 41
 Ca = 0.484  # m
 la = 1.691  # m
+
 ##
 # read the file first
 loading = []
@@ -14,6 +17,8 @@ with open('aerodynamicloadcrj700.dat') as csv_file:
     for row in csv_reader:
         loading.append(row)
 
+len(loading)         # Check if equal to Nz
+len(loading[0])      # Check if equal to Nx
 
 # calculate coordinates and append to dictionary as  d[x] = [(z, load),(z, load), etc]
 d = dict()
