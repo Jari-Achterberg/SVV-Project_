@@ -75,3 +75,5 @@ print(line_load[3])
 print(torques[3])
 # for total torque calculate sum of found torques ( for torque/Mx)
 # for moment in z- direction integrate the line load once again to obtain the moment
+
+#JARI IS GAY
