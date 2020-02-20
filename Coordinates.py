@@ -20,7 +20,7 @@ with open('aerodynamicloadcrj700.dat') as csv_file:
 # print(len(loading))         # Check if equal to Nz
 # print(len(loading[0]))      # Check if equal to Nx
 
-# calculate coordinates and append to dictionary as  d[x] = [(z, load),(z, load), etc]
+# calculate coordinates and append to dictionary as  d[index] = [x,z,load]
 d = dict()
 index = 0
 
