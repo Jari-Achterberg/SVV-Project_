@@ -17,6 +17,41 @@ def integral(x1, x2, y1, y2):
     return intaxbvar, intxaxbvar
 
 
+def doubleintegral(x1, x2, y1, y2):
+    # Calculating parameters for linear equation y = ax + b
+    a = (y2-y1)/(x2-x1)
+    b = y1-((y2-y1)/(x2-x1))*x1
+
+    # Integration scheme for f(x)=ax+b
+    intaxbvar = (a/6)*(x2**3 - x1**3) + (b/2)*(x2**2-x1**2)
+    # should be similar to: (y1 + y2)*(x2 - x1)/2
+
+    return intaxbvar
+
+
+def tripleintegral(x1, x2, y1, y2):
+    # Calculating parameters for linear equation y = ax + b
+    a = (y2 - y1) / (x2 - x1)
+    b = y1 - ((y2 - y1) / (x2 - x1)) * x1
+
+    # Integration scheme for f(x)=ax+b
+    intaxbvar = (a / 24) * (x2 ** 4 - x1 ** 4) + (b / 6) * (x2 ** 3 - x1 ** 3)
+    # should be similar to: (y1 + y2)*(x2 - x1)/2
+
+    return intaxbvar
+
+
+def quatrointegral(x1, x2, y1, y2):
+    # Calculating parameters for linear equation y = ax + b
+    a = (y2 - y1) / (x2 - x1)
+    b = y1 - ((y2 - y1) / (x2 - x1)) * x1
+
+    # Integration scheme for f(x)=ax+b
+    intaxbvar = (a / 120) * (x2 ** 5 - x1 ** 5) + (b / 24) * (x2 ** 4 - x1 ** 4)
+    # should be similar to: (y1 + y2)*(x2 - x1)/2
+
+    return intaxbvar
+
 index = 0
 line_load, torques = [], []
 
@@ -32,8 +67,8 @@ for i in range(0, Nx):
         torque += intxaxb
         index += 1
 
-    line_load.append(load)
-    torques.append(torque)
+    line_load.append(-load)         # Correction because all z-coordinates are negative
+    torques.append(-torque)         # Correction because all z-coordinates are negative
 
 # check if found loads and torques have reasonable numbers
 print(line_load[3])
