@@ -52,6 +52,7 @@ def quadruple_integral(x1, x2, y1, y2):
 
     return intaxbvar
 
+
 index = 0
 line_load, torques = [], []
 
@@ -81,6 +82,7 @@ print(torques[3])
 
 print(d[0][1])
 print(d[1][1])
+
 # x / dx
 # setting up integral
 # list of X is imported
@@ -89,19 +91,41 @@ force_list, moment_list = [], []
 
 # steps taken to estimate integral, can be changed
 steps = 1000000
-length = la
+
+# define length from first known value to last known value (what to do with the unknown part???
+length = x_list[-1] - x_list[0]
 stepsize = length/steps
+
+# define func list
+func_list = []
+for q in range(len(x_list) - 1):
+    x1 = x_list[q]
+    x2 = x_list[q + 1]
+    y1 = line_load[q]
+    y2 = line_load[q + 1]
+    # define a and b
+    a = (y2 - y1)/(x2 - x1)
+    b = (y1 - a*x1)
+    if len(func_list) != 0:
+        var_a, var_b = func_list[-1]
+        c = a - var_a
+        new_a = var_a + c
+        new_b = var_b - c*x1
+        func_list.append((new_a, new_b))
+    else:
+        func_list.append((a, b))
 
 for i in range(steps):
     # first find x in list:
     # x value is stepsize times i ?? VERIFY
-    x_value = stepsize*i
+    x_value = stepsize*i + x_list[0]
     for idx, elem in enumerate(x_list):
         if elem > x_value:
-            func_idx = idx
+            func_idx = idx - 1
             break
     # x is found, now take the right dist func from func list
-    dist = func_list[func_idx]
+    g, h = func_list[func_idx]
+    dist = g*x_value + h
 
     # calculate new force and moment using the current dist func
     force = force + dist*stepsize
@@ -111,3 +135,6 @@ for i in range(steps):
     force_list.append(force)
     moment_list.append(moment)
 
+# check values
+print(force_list[0:5])
+print(force_list[-5:-1])
