@@ -1,5 +1,6 @@
 # Making the integration_scheme
 from Coordinates import d, Nx, Nz, x_list, la
+from matplotlib import pyplot as plt
 
 
 def integral(x1, x2, y1, y2):
@@ -17,6 +18,7 @@ def integral(x1, x2, y1, y2):
     return intaxbvar, intxaxbvar
 
 
+'''
 def double_integral(x1, x2, y1, y2):
     # Calculating parameters for linear equation y = ax + b
     a = (y2-y1)/(x2-x1)
@@ -51,7 +53,7 @@ def quadruple_integral(x1, x2, y1, y2):
     # should be similar to: (y1 + y2)*(x2 - x1)/2
 
     return intaxbvar
-
+'''
 
 index = 0
 line_load, torques = [], []
@@ -75,13 +77,13 @@ for i in range(0, Nx):
     torques.append(-torque)         # Correction because all z-coordinates are negative
 
 # check if found loads and torques have reasonable numbers
-print(line_load[3])
-print(torques[3])
+print("line_load_3: ", line_load[3])
+print("torque on line3:" , torques[3])
 # for total torque calculate sum of found torques ( for torque/Mx)
 # for moment in z- direction integrate the line load once again to obtain the moment
-
-print(d[0][1])
-print(d[1][1])
+print("first value: ", x_list[0])
+# print(d[0][1])
+# print(d[1][1])
 
 # x / dx
 # setting up integral
@@ -115,10 +117,12 @@ for q in range(len(x_list) - 1):
     else:
         func_list.append((a, b))
 
+x_step_list = []
 for i in range(steps):
     # first find x in list:
-    # x value is stepsize times i ?? VERIFY
+    # x value is step size times i ?? VERIFY
     x_value = stepsize*i + x_list[0]
+    x_step_list.append(x_value)
     for idx, elem in enumerate(x_list):
         if elem > x_value:
             func_idx = idx - 1
@@ -138,3 +142,13 @@ for i in range(steps):
 # check values
 print(force_list[0:5])
 print(force_list[-5:-1])
+#
+print(moment_list[0:5])
+print(moment_list[-5:-1])
+#
+plt.plot(x_step_list, moment_list)
+plt.plot(x_step_list, force_list)
+plt.legend(labels=['moment', 'force'])
+plt.xlabel('x')
+plt.ylabel('magnitude')
+plt.show()
