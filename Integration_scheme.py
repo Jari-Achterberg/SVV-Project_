@@ -61,7 +61,7 @@ line_load, torques = [], []
 for i in range(0, Nx):
 
     load = 0        # kN / m (both variables are integrated once,
-    torque = 0      # kN      they become a 2D representation of the 3D distributed load)
+    torque = 0      # kN*m /m      they become a 2D representation of the 3D distributed load)
 
     for j in range(0, Nz-1):
 
@@ -72,13 +72,13 @@ for i in range(0, Nx):
         index += 1
 
     # loads and torques are integrated from 0 to Chord length, but it should be the other way around
-    # that's why a minus is inserted here
+    # that's why a minus is inserted here for the load
     line_load.append(-load)         # Correction because all z-coordinates are negative
-    torques.append(-torque)         # Correction because all z-coordinates are negative
+    torques.append(torque)         # NO Correction because all z-coordinates are negative (integrated twice so sign became positive again
 
 # check if found loads and torques have reasonable numbers
 print("line_load_3: ", line_load[3])
-print("torque on line3:" , torques[3])
+print("torque on line3: ", torques[3])
 # for total torque calculate sum of found torques ( for torque/Mx)
 # for moment in z- direction integrate the line load once again to obtain the moment
 print("first value: ", x_list[0])
@@ -88,8 +88,8 @@ print("first value: ", x_list[0])
 # x / dx
 # setting up integral
 # list of X is imported
-force, moment = 0, 0
-force_list, moment_list = [], []
+force, moment, torque = 0, 0, 0
+force_list, moment_list, torque_list = [], [], []
 
 # steps taken to estimate integral, can be changed
 steps = 1000000
@@ -99,25 +99,33 @@ length = x_list[-1] - x_list[0]
 stepsize = length/steps
 
 # define func list
-func_list = []
-for q in range(len(x_list) - 1):
-    x1 = x_list[q]
-    x2 = x_list[q + 1]
-    y1 = line_load[q]
-    y2 = line_load[q + 1]
-    # define a and b
-    a = (y2 - y1)/(x2 - x1)
-    b = (y1 - a*x1)
 
-    if len(func_list) != 0:
-        var_a, var_b = func_list[-1]
-        c = a - var_a
-        new_a = var_a + c
-        new_b = var_b - c*x1
-        func_list.append((new_a, new_b))
-    else:
-        func_list.append((a, b))
 
+def compute_func_list(y_list):
+    func_list_ = []
+    for q in range(len(x_list) - 1):
+        x1 = x_list[q]
+        x2 = x_list[q + 1]
+        y1 = y_list[q]
+        y2 = y_list[q + 1]
+        # define a and b
+        a = (y2 - y1)/(x2 - x1)
+        b = (y1 - a*x1)
+
+        if len(func_list_) != 0:
+            var_a, var_b = func_list_[-1]
+            c = a - var_a
+            new_a = var_a + c
+            new_b = var_b - c*x1
+            func_list_.append((new_a, new_b))
+        else:
+            func_list_.append((a, b))
+
+    return func_list_
+
+
+func_list = compute_func_list(line_load)
+func_list_torque = compute_func_list(torques)
 x_step_list = []
 for i in range(steps):
     # first find x in list:
@@ -133,12 +141,22 @@ for i in range(steps):
     dist = g*x_value + h
 
     # calculate new force and moment using the current dist func
+    # force is basically the term that is needed for Sy
+    # moment is Mz
     force = force + dist*stepsize
-    moment = moment + force*stepsize - dist*stepsize/2
+    moment = moment + force*stepsize - dist*stepsize*stepsize/2
 
     # append them to a list
     force_list.append(force)
     moment_list.append(moment)
+
+    # compute torque integral
+    s, t = func_list_torque[func_idx]
+    dist2 = s*x_value + t
+    # same procedure, f
+    torque += dist2*stepsize
+    torque_list.append(torque)
+
 
 # check values
 print(force_list[0:5])
@@ -149,7 +167,10 @@ print(moment_list[-5:-1])
 #
 plt.plot(x_step_list, moment_list)
 plt.plot(x_step_list, force_list)
-plt.legend(labels=['moment', 'force'])
+plt.plot(x_step_list, torque_list)
+plt.plot(x_list, line_load)
+plt.plot(x_list, torques)
+plt.legend(labels=['moment z', 'shear force y', 'torque x', 'line_load along x', 'line torque along x'])
 plt.xlabel('x')
 plt.ylabel('magnitude')
 plt.show()
