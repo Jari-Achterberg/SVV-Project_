@@ -108,6 +108,7 @@ for q in range(len(x_list) - 1):
     # define a and b
     a = (y2 - y1)/(x2 - x1)
     b = (y1 - a*x1)
+
     if len(func_list) != 0:
         var_a, var_b = func_list[-1]
         c = a - var_a
