@@ -1,5 +1,5 @@
 # Making the integration_scheme
-from Coordinates import d, Nx, Nz
+from Coordinates import d, Nx, Nz, x_list, la
 
 
 def integral(x1, x2, y1, y2):
@@ -17,7 +17,7 @@ def integral(x1, x2, y1, y2):
     return intaxbvar, intxaxbvar
 
 
-def doubleintegral(x1, x2, y1, y2):
+def double_integral(x1, x2, y1, y2):
     # Calculating parameters for linear equation y = ax + b
     a = (y2-y1)/(x2-x1)
     b = y1-((y2-y1)/(x2-x1))*x1
@@ -29,7 +29,7 @@ def doubleintegral(x1, x2, y1, y2):
     return intaxbvar
 
 
-def tripleintegral(x1, x2, y1, y2):
+def triple_integral(x1, x2, y1, y2):
     # Calculating parameters for linear equation y = ax + b
     a = (y2 - y1) / (x2 - x1)
     b = y1 - ((y2 - y1) / (x2 - x1)) * x1
@@ -41,7 +41,7 @@ def tripleintegral(x1, x2, y1, y2):
     return intaxbvar
 
 
-def quatrointegral(x1, x2, y1, y2):
+def quadruple_integral(x1, x2, y1, y2):
     # Calculating parameters for linear equation y = ax + b
     a = (y2 - y1) / (x2 - x1)
     b = y1 - ((y2 - y1) / (x2 - x1)) * x1
@@ -68,7 +68,7 @@ for i in range(0, Nx):
         torque += intxaxb
         index += 1
 
-    # loads ant torques are integrated from 0 to Chord length, but it should be the other way around
+    # loads and torques are integrated from 0 to Chord length, but it should be the other way around
     # that's why a minus is inserted here
     line_load.append(-load)         # Correction because all z-coordinates are negative
     torques.append(-torque)         # Correction because all z-coordinates are negative
@@ -82,4 +82,32 @@ print(torques[3])
 print(d[0][1])
 print(d[1][1])
 # x / dx
+# setting up integral
+# list of X is imported
+force, moment = 0, 0
+force_list, moment_list = [], []
+
+# steps taken to estimate integral, can be changed
+steps = 1000000
+length = la
+stepsize = length/steps
+
+for i in range(steps):
+    # first find x in list:
+    # x value is stepsize times i ?? VERIFY
+    x_value = stepsize*i
+    for idx, elem in enumerate(x_list):
+        if elem > x_value:
+            func_idx = idx
+            break
+    # x is found, now take the right dist func from func list
+    dist = func_list[func_idx]
+
+    # calculate new force and moment using the current dist func
+    force = force + dist*stepsize
+    moment = moment + force*stepsize - dist*stepsize/2
+
+    # append them to a list
+    force_list.append(force)
+    moment_list.append(moment)
 

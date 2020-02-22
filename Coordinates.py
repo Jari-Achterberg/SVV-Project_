@@ -23,12 +23,13 @@ with open('aerodynamicloadcrj700.dat') as csv_file:
 # calculate coordinates and append to dictionary as  d[index] = [x,z,load]
 d = dict()
 index = 0
+x_list = []
 
 for j in range(1, Nx + 1):
     theta_xi = (j - 1) / Nx * math.pi
     theta_xi_next = j / Nx * math.pi
     x = 0.5 * ((la / 2) * (1 - math.cos(theta_xi)) + (la/2)*(1 - math.cos(theta_xi_next)))
-
+    x_list.append(x)
     for i in range(1, Nz + 1):
         theta_zi = (i - 1) / Nz * math.pi
         theta_zi_next = i / Nz * math.pi
