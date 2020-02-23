@@ -82,14 +82,12 @@ def aerodynamicloading(x):
     force, moment = 0, 0                # Initial starting value
     force_lst, moment_lst = [], []      # Initialise lst
 
-    for i in range(len(x_list)):
-        if x>x_list[i]:
-            point = i
-            break
-
     for j in range(steps):
         print(j)
         x_value = stepsize * j + x_list[0]
+
+        if x_value>x:
+            break
 
         if x_value>x_list[inx]:
             inx =+ 1
