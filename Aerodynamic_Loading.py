@@ -55,7 +55,7 @@ force, moment = 0, 0
 force_lst, moment_lst = [], []
 
 # steps taken to estimate integral, can be changed
-steps = 100
+steps = 1000
 
 # define length from first known value to last known value (what to do with the unknown part???
 length = x_list[-1] - x_list[0]
@@ -78,7 +78,6 @@ for q in range(len(x_list) - 1):
 def aerodynamicloading(x):
 
     inx = 0                             # Just a temporary value to index
-    x_value = 0                         # Initial starting value
     force, moment = 0, 0                # Initial starting value
     force_lst, moment_lst = [], []      # Initialise lst
 
@@ -92,7 +91,7 @@ def aerodynamicloading(x):
         if x_value>x_list[inx]:
             inx =+ 1
 
-        force = force + (func_lst[inx][0]*x_value)*stepsize + func_lst[inx][1]
+        force = force + (func_lst[inx][0]*x_value+ func_lst[inx][1])*stepsize
         moment = moment + (func_lst[inx][0]*(x_value-(stepsize/2)) + func_lst[inx][1])*((stepsize**2)/2)
 
         force_lst.append(force)
