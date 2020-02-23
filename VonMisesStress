@@ -1,0 +1,13 @@
+sigma_vm = 0
+sigma_xx = 0
+sigma_yy = 0
+sigma_zz = 0
+shearstress_xy = 0
+shearstress_yz = 0
+shearstress_xz = 0
+
+def VonMisesStress():
+    sigma_vm = ((sigma_xx-sigma_yy)**2 + (sigma_yy - sigma_zz)**2 + 
+                (sigma_zz-sigma_xx)**2)/2 + 3 * (shearstress_xy**2 + 
+                shearstress_yz**2 + shearstress_xz**2)
+    return sigma_vm
