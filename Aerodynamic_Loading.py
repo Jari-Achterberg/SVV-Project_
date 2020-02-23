@@ -85,45 +85,20 @@ def aerodynamicloading(x):
     for i in range(len(x_list)):
         if x>x_list[i]:
             point = i
+            break
 
     for j in range(steps):
         print(j)
         x_value = stepsize * j + x_list[0]
 
         if x_value>x_list[inx]:
-            inx = inx = + 1
+            inx =+ 1
 
-        force = force + func_lst[inx][0]*x_value + func_lst[inx][1]
-        moment = moment + (func_lst[inx][0]*(x_value-(stepsize/2)) + func_lst[inx][1])*(stepsize/2)
+        force = force + (func_lst[inx][0]*x_value)*stepsize + func_lst[inx][1]
+        moment = moment + (func_lst[inx][0]*(x_value-(stepsize/2)) + func_lst[inx][1])*((stepsize**2)/2)
 
         force_lst.append(force)
         moment_lst.append(moment)
 
     return force_lst, moment_lst
 
-
-
-
-# for i in range(steps):
-#     x_value = stepsize * i + x_list[0]      # x value is stepsize times i
-#
-#     for idx, elem in enumerate(x_list):
-#         if elem > x_value:
-#             func_idx = idx - 1
-#             break
-#     # x is found, now take the right dist func from func list
-#     g, h = func_list[func_idx]
-#     dist = g * x_value + h
-#
-#     # calculate new force and moment using the current dist func
-#     force = force + dist * stepsize
-#     moment = moment + force * stepsize - dist * stepsize / 2
-#
-#     # append them to a list
-#     force_list.append(force)
-#     moment_list.append(moment)
-#
-# # check values
-# print(force_list[0:5])
-# print(force_list[-5:-1])
-#
