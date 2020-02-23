@@ -75,28 +75,23 @@ for q in range(len(x_list) - 1):
 
     func_lst.append((a, b))
 
-def aerodynamicloading(x):
+inx = 0                             # Just a temporary value to index
+force, moment = 0, 0                # Initial starting value
+force_lst, moment_lst = [], []      # Initialise lst
 
-    inx = 0                             # Just a temporary value to index
-    force, moment = 0, 0                # Initial starting value
-    force_lst, moment_lst = [], []      # Initialise lst
+for j in range(steps):
+    print(j)
+    x_value = stepsize * j + x_list[0]
 
-    for j in range(steps):
-        print(j)
-        x_value = stepsize * j + x_list[0]
+    if x_value>x_list[inx]:
+        inx =+ 1
 
-        if x_value>x:
-            break
+    force = force + (func_lst[inx][0]*x_value+ func_lst[inx][1])*stepsize
+    moment = moment + (func_lst[inx][0]*(x_value-(stepsize/2)) + func_lst[inx][1])*((stepsize**2)/2)
 
-        if x_value>x_list[inx]:
-            inx =+ 1
+    force_lst.append(force)
+    moment_lst.append(moment)
 
-        force = force + (func_lst[inx][0]*x_value+ func_lst[inx][1])*stepsize
-        moment = moment + (func_lst[inx][0]*(x_value-(stepsize/2)) + func_lst[inx][1])*((stepsize**2)/2)
 
-        force_lst.append(force)
-        moment_lst.append(moment)
-
-    return force_lst, moment_lst
 
 #
