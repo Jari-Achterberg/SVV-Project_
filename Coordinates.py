@@ -33,9 +33,10 @@ for j in range(1, Nx + 1):
     for i in range(1, Nz + 1):
         theta_zi = (i - 1) / Nz * math.pi
         theta_zi_next = i / Nz * math.pi
-        z = - 0.5 * ((Ca / 2) * (1 - math.cos(theta_zi)) + (Ca / 2) * (1 - math.cos(theta_zi_next)))
+        # minus sign removed, because different coordinate system of the z-axis
+        z = 0.5 * ((Ca / 2) * (1 - math.cos(theta_zi)) + (Ca / 2) * (1 - math.cos(theta_zi_next)))
 
-        d[index] = (x, z, loading[i - 1][j - 1])
+        d[index] = (x, z, -float(loading[i - 1][j - 1]))
         index += 1
 
 # dictionary x -> (z, load)

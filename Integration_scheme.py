@@ -65,7 +65,7 @@ for i in range(0, Nx):
 
     for j in range(0, Nz-1):
 
-        intaxb, intxaxb = integral(d[index][1], d[index+1][1], float(d[index][2]), float(d[index+1][2]))
+        intaxb, intxaxb = integral(d[index][1], d[index+1][1], d[index][2], d[index+1][2])
 
         load += intaxb
         torque += intxaxb
@@ -73,8 +73,8 @@ for i in range(0, Nx):
 
     # loads and torques are integrated from 0 to Chord length, but it should be the other way around
     # that's why a minus is inserted here for the load
-    line_load.append(-load)         # Correction because all z-coordinates are negative
-    torques.append(torque)         # NO Correction because all z-coordinates are negative (integrated twice so sign became positive again
+    line_load.append(load)         # Correction because all z-coordinates are negative
+    torques.append(torque)         # No Correction because all z-coordinates are negative (integrated twice so sign became positive again
 
 # check if found loads and torques have reasonable numbers
 print("line_load_3: ", line_load[3])
@@ -125,6 +125,7 @@ def compute_func_list(y_list):
 
 
 func_list = compute_func_list(line_load)
+print(func_list)
 func_list_torque = compute_func_list(torques)
 x_step_list = []
 for i in range(steps):
