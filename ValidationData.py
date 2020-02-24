@@ -8,6 +8,7 @@ Created on Wed Feb 19 22:46:44 2020
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 import numpy as np
+from matplotlib import cm
 
 
 #Find X,y,z locations of elements 
@@ -125,19 +126,20 @@ xloc, yloc, zloc = ElementLabelLocations()
 
 
 #Plot figures
-fig, ax = plt.subplots()
-
+# fig, ax = plt.subplots()
+fig = plt.figure()
+ax = fig.gca(projection='3d')
 #3D plot
 #ax = plt.axes(projection='3d')
-zline = zloc
-xline = xloc
-yline = yloc
-#ax.plot3D(xline, zline, yline, 'bd')
 
-#PLot 3D graph
-ax = plt.axes(projection='3d')
-ax.scatter(xline, yline, zline, cmap='viridis', edgecolor='none');
+# Remove the [:5778] part when everything is fixed!
+zline = zloc[:5778]
+xline = xloc[:5778]
+yline = yloc[:5778]
 
+# plot 3D graph using c (data)
+ax.scatter(xline, yline, zline, cmap='RdBu', c=L1R1AvVonMises)
+# ax.plot_surface(xline, yline, new_z, cmap='hot')
 
 #Plot average Von Mises stress
 #plt.plot(L1R1ElementLabel,L1R1AvVonMises)
@@ -150,4 +152,5 @@ ax.grid(True, zorder=5)
 ax.set_xlabel("xloc")
 ax.set_ylabel("yloc")
 
-plt.show
+plt.show()
+
