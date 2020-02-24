@@ -36,7 +36,7 @@ for j in range(1, Nx + 1):
         # minus sign removed, because different coordinate system of the z-axis
         z = 0.5 * ((Ca / 2) * (1 - math.cos(theta_zi)) + (Ca / 2) * (1 - math.cos(theta_zi_next)))
 
-        d[index] = (x, z, -float(loading[i - 1][j - 1]))
+        d[index] = (x, z, -float(loading[i - 1][j - 1]))    # Aerodynamic loading is negative in our coordinate system
         index += 1
 
 # dictionary x -> (z, load)

@@ -37,7 +37,7 @@ for i in range(0, Nx):
     torque = 0  # kN      they become a 2D representation of the 3D distributed load)
 
     for j in range(0, Nz - 1):
-        intaxb, intxaxb = integral(d[index][1], d[index + 1][1], float(d[index][2]), float(d[index + 1][2]))
+        intaxb, intxaxb = integral(d[index][1], d[index+1][1], float(d[index][2]), float(d[index+1][2]))
 
         load += intaxb
         torque += intxaxb
@@ -45,8 +45,8 @@ for i in range(0, Nx):
 
     # loads and torques are integrated from 0 to Chord length, but it should be the other way around
     # that's why a minus is inserted here
-    line_load.append(-load)  # Correction because all z-coordinates are negative
-    torques.append(-torque)  # Correction because all z-coordinates are negative
+    line_load.append(load)  # Correction because all z-coordinates are negative
+    torques.append(torque)  # Correction because all z-coordinates are negative
 
 # for total torque calculate sum of found torques ( for torque/Mx)
 # for moment in z- direction integrate the line load once again to obtain the moment
