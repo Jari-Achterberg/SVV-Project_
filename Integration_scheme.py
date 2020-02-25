@@ -74,7 +74,7 @@ for i in range(0, Nx):
     # loads and torques are integrated from 0 to Chord length, but it should be the other way around
     # that's why a minus is inserted here for the load
     line_load.append(load)         # Correction because all z-coordinates are negative
-    torques.append(torque)         # No Correction because all z-coordinates are negative (integrated twice so sign became positive again
+    torques.append(-torque)         # No Correction because all z-coordinates are negative (integrated twice so sign became positive again
 
 # check if found loads and torques have reasonable numbers
 print("line_load_3: ", line_load[3])
