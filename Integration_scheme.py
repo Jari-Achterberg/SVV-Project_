@@ -13,7 +13,8 @@ def integral(x1, x2, y1, y2):
     # should be similar to: (y1 + y2)*(x2 - x1)/2
 
     # Integration scheme for f(x)=(ax+b)*x
-    intxaxbvar = (1/3)*a*(x2**3 - x1**3) + 0.5*b*(x2**2-x1**2)
+    xh = 0.0865
+    intxaxbvar = (1/3)*a*(x2**3 - x1**3) + 0.5*(b-a*xh)*(x2**2-x1**2) - b*xh*(x2-x1)
 
     return intaxbvar, intxaxbvar
 
@@ -71,10 +72,9 @@ for i in range(0, Nx):
         torque += intxaxb
         index += 1
 
-    # loads and torques are integrated from 0 to Chord length, but it should be the other way around
-    # that's why a minus is inserted here for the load
-    line_load.append(load)         # Correction because all z-coordinates are negative
-    torques.append(-torque)         # No Correction because all z-coordinates are negative (integrated twice so sign became positive again
+    #
+    line_load.append(load)         #
+    torques.append(-torque)         # Torque becomes negative
 
 # check if found loads and torques have reasonable numbers
 print("line_load_3: ", line_load[3])
