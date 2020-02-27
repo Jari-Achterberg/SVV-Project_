@@ -8,27 +8,28 @@ Created on Tue Feb 25 23:41:38 2020
 import math as m
 import numpy as np
 import pickle
+import scipy as sp
 
 #  ===================== Input Parameters: ====================== 
 #To be inputed in the indicated units.
-aircraft = "B737" # Aircraft type, influences aerodynamic load
-Ca     = 0.605         # aileron chord                                [m]
-la     = 2.661         # span of aileron                              [m]
-x1     = 0.172         # x-location of hinge 1                        [m]
-x2     = 1.211         # x-location of hinge 2                        [m]
-x3     = 2.591         # x-location of hinge 3                        [m]
-xa     = .35           # distance between Actuator I and Actuator II  [m]
-ha     = .205          # aileron height                               [m]
+aircraft = "CRJ700" # Aircraft type, influences aerodynamic load
+Ca     = 0.484         # aileron chord                                [m]
+la     = 1.691         # span of aileron                              [m]
+x1     = 0.149         # x-location of hinge 1                        [m]
+x2     = 0.554         # x-location of hinge 2                        [m]
+x3     = 1.541         # x-location of hinge 3                        [m]
+xa     = .272           # distance between Actuator I and Actuator II  [m]
+ha     = .173          # aileron height                               [m]
 tsk = 1.1/1000         # skin thickness                               [m]
-tsp = 2.8/1000         # spar thickness                               [m]
+tsp = 2.5/1000         # spar thickness                               [m]
 tst = 1.2/1000         # stiffener thickness                          [m]
-hst = 0.016            # stiffener height                             [m]
-wst = 0.019            # stiffener width                              [m]
-nst = 15               # number of stiffeners                         [-]
-d1 = 0.01154           # vertical deflection hinge 1                  [m]
-d3 = 0.01840           # vertical deflection hinge 3                  [m]
-theta = m.radians(28)  # aileron - wing angle                        [rad]
-P = 97.4/1000          # actuator II load                             [N]
+hst = 0.014            # stiffener height                             [m]
+wst = 0.018            # stiffener width                              [m]
+nst = 13               # number of stiffeners                         [-]
+d1 = 0.00681           # vertical deflection hinge 1                  [m]
+d3 = 0.02030           # vertical deflection hinge 3                  [m]
+theta = m.radians(26)  # aileron - wing angle                        [rad]
+P = 37.9*1000          # actuator II load                             [N]
 
 E       = 70        # material Young's modulus                       [GPa]
 G       = 28.0        # material shear moduus                        [GPa]
@@ -38,12 +39,11 @@ G       = 28.0        # material shear moduus                        [GPa]
 # ================= Functions ===========================
 # MacCauley stepfunction
 def MC(x, a, e):
-    if max((x-a), 0) == (x-a) and e > 0:
+    if max((x-a), 0) == (x-a):
         return (x-a)**e
-    elif max((x-a), 0) > (x-a) and e == 0:
-        return 1
-    else:
-        return 0
+    elif max((x-a), 0) > (x-a):
+        return 0**e
+
 
 # ================ Aerodynamic Loading ==================
 filename='aeroloading'
@@ -52,26 +52,47 @@ with open(filename, "rb") as f:
 
 def V_q(x):
     index = round(x/stepsize)
+    if x<0.0012404325495737286:
+        index = 0
+    if x>1.6897595674504262:
+        index = -1
+    print(index)
     Vq = force_list[index]
     return Vq
 
 def M_q(x):
     index = round(x / stepsize)
+    if x<0.0012404325495737286:
+        index = 0
+    if x>1.6897595674504262:
+        index = -1
     Mq = moment_list[index]
     return Mq
 
 def T_q(x):
     index = round(x / stepsize)
+    if x<0.0012404325495737286:
+        index = 0
+    if x>1.6897595674504262:
+        index = -1
     Tq = torque_list[index]
     return Tq
 
 def M_qII(x):
     index = round(x / stepsize)
+    if x<0.0012404325495737286:
+        index = 0
+    if x>1.6897595674504262:
+        index = -1
     M_qII = moment_II_list[index]
     return M_qII
 
 def T_q_II(x):
     index = round(x / stepsize)
+    if x<0.0012404325495737286:
+        index = 0
+    if x>1.6897595674504262:
+        index = -1
     T_q_II = torque_I_list[index]
     return T_q_II
 
@@ -79,7 +100,7 @@ def T_q_II(x):
 eta = Ca/4  # Preliminary value for shear center, input correct one or call function here.
 Iyy = 1     # Preliminary values for MoI, input correct values or call functions here.
 Izz = 1
-
+J= 0.05176  # [m^4]
 
 # ========================================================================
 # =========== Solve Reaction forces, moments and deflections:  =========== 
@@ -109,8 +130,8 @@ v_left       = lambda X : -1/(E*Izz)  *  np.array([-1/6*MC(X, x1, 3), 0, -1/6*MC
 v_right      = lambda X : -1/(E*Izz)  *  (M_qII(X) + 1/6*MC(X, x_II, 3)*P*m.sin(theta)/6)
 
 
-w_left      = lambda X : -1/(E*Iyy)  *  np.array([0,1/6*MC(X, x1, 3), 0, 1/6*MC(X, x2, 3), 0, 1/6*MC(X, x3, 3), 1/6*MC(X, x3, 3), 0, -m.cos(theta)/6*MC(X, x_I, 3), 0, 0, X, 1, 0])
-w_right       = lambda X : -1/(E*Iyy_airfoil)*         (1/6*MC(X, x_II, 3)*P*m.cos(theta))
+w_left      = lambda X : -1/(E*Iyy)  *  np.array([0,1/6*MC(X, x1, 3), 0, 1/6*MC(X, x2, 3), 0, 1/6*MC(X, x3, 3), -m.cos(theta)/6*MC(X, x_I, 3), 0, 0, X, 1, 0])
+w_right       = lambda X : -1/(E*Iyy)*         (1/6*MC(X, x_II, 3)*P*m.cos(theta))
                                                                              
 
 phi_left   = lambda X : 1/(G*J)           * np.array([(z_h)*MC(X, x1, 1), 0, (z_h)*MC(X, x2, 1), 0, z_h*MC(X, x3, 1), 0, -m.cos(theta)*ha/2*MC(X, x_I, 1), 0, 0, 0, 0, 1])
@@ -148,16 +169,17 @@ A[10, :],           B[10]   = w_left(x3)                             , d3*m.sin(
 A[11, :],           B[11]   = m.sin(theta)*(v_left(x_I) - phi_left(x_I) * eta) - m.cos(theta)*(w_left(x_I) - phi_left(x_I)*ha/2)    ,   0 - m.sin(theta)*(v_right(x_I) - phi_right(x_I) * eta) - m.cos(theta)*(w_right(x_I) - phi_right(x_I)*ha/2)
 
 # Solve for A {var} = B
+#var = sp.sparse.linalg.spsolve(A, B)
 var = np.linalg.solve(A, B)
 R1y, R1z, R2y, R2z, R3y, R3z, R_I, C1, C2, C3, C4, C5 = var        # Note: u0 = Cu0/(EIzz), v0 = Cv0/(EIyy), theta0 = Ctheta0/(GJ)
 
-T      = np.sum(Mx_left(x)*var)         + T_right(x)
-My      = np.sum(My_left(x)*var)         + My_right(x)
-Mz      = np.sum(Mz_left(x)*var)         + Mz_right(x)
-phi   = np.sum(phi_left(x)*var)      + phi_right(x)
-v       = np.sum(v_left(x)*var)          + v_right(x)
-w       = np.sum(w_left(x)*var)          + w_right(x)
-V       = m.cos(theta)*(v(x) + phi(x)*z_h) + m.sin(theta)*(w(x)+ha/2*phi(x))
+T = lambda x:      np.sum(T_left(x)*var)         + T_right(x)
+My = lambda x: np.sum(My_left(x)*var)         + My_right(x)
+Mz = lambda x: np.sum(Mz_left(x)*var)         + Mz_right(x)
+phi = lambda x: np.sum(phi_left(x)*var)      + phi_right(x)
+v = lambda x: np.sum(v_left(x)*var)          + v_right(x)
+w = lambda x: np.sum(w_left(x)*var)          + w_right(x)
+V  = lambda x: m.cos(theta)*(v(x) + phi(x)*z_h) + m.sin(theta)*(w(x)+ha/2*phi(x))
 # W       = -m.sin(theta)*(u - theta*(z_h) ) + m.cos(theta)*v
 Sy = lambda X : - R1y*MC(X,x1,0) - R2y*MC(X,x2,0) - R3y*MC(X,x3,0) - R_I*m.sin(theta)*MC(X,x_I,0) + P*m.sin(theta)*MC(X,x_II,0) + V_q(X)
 Sz = lambda X : R1z*MC(X,x1,0)+  R2z*MC(X,x2,0)+ R3z*MC(X,x3,0) -R_I*m.cos(theta)*MC(X,x_I,0) + P*m.cos(theta)*MC(X,x_II,0)  
