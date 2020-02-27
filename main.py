@@ -7,6 +7,7 @@ Created on Tue Feb 25 23:41:38 2020
 
 import math as m
 import numpy as np
+import pickle
 
 #  ===================== Input Parameters: ====================== 
 #To be inputed in the indicated units.
@@ -44,8 +45,26 @@ def MC(x, a, e):
     else:
         return 0
 
-def Vq(x):
+# ================ Aerodynamic Loading ==================
+filename='aeroloading'
+with open(filename, "rb") as f:
+    force_list,moment_list,torque_list,stepsize = pickle.load(f)
 
+def Vq(x):
+    index = round(x/stepsize)
+    Vq = force_list[index]
+    return Vq
+
+def Mq(x):
+    index = round(x / stepsize)
+    Mq = moment_list[index]
+    return Mq
+
+def Tq(x):
+    index = round(x / stepsize)
+    Tq = torque_list[index]
+    return Tq
+#...whythe helldasfasd
 
 # =================Geometrical properties of airfoil================
 eta = Ca/4  # Preliminary value for shear center, input correct one or call function here.
