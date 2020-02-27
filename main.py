@@ -48,23 +48,32 @@ def MC(x, a, e):
 # ================ Aerodynamic Loading ==================
 filename='aeroloading'
 with open(filename, "rb") as f:
-    force_list,moment_list,torque_list,stepsize = pickle.load(f)
+    force_list,moment_list,torque_list, moment_II_list, torque_I_list, stepsize = pickle.load(f)
 
-def Vq(x):
+def V_q(x):
     index = round(x/stepsize)
     Vq = force_list[index]
     return Vq
 
-def Mq(x):
+def M_q(x):
     index = round(x / stepsize)
     Mq = moment_list[index]
     return Mq
 
-def Tq(x):
+def T_q(x):
     index = round(x / stepsize)
     Tq = torque_list[index]
     return Tq
-#...whythe helldasfasd
+
+def M_qII(x):
+    index = round(x / stepsize)
+    M_qII = moment_II_list[index]
+    return M_qII
+
+def T_q_II(x):
+    index = round(x / stepsize)
+    T_q_II = torque_I_list[index]
+    return T_q_II
 
 # =================Geometrical properties of airfoil================
 eta = Ca/4  # Preliminary value for shear center, input correct one or call function here.
@@ -150,3 +159,4 @@ v       = np.sum(v_left(x)*var)          + v_right(x)
 w       = np.sum(w_left(x)*var)          + w_right(x)
 V       = m.cos(theta)*(v(x) + phi(x)*z_h) + m.sin(theta)*(w(x)+ha/2*phi(x))
 # W       = -m.sin(theta)*(u - theta*(z_h) ) + m.cos(theta)*v
+
