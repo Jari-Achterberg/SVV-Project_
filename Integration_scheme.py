@@ -171,6 +171,11 @@ for i in range(steps):
     torque_list.append(torque)
     torque_I_list.append(torque_I)
 
+filename='aeroloading'
+saveObject = (force_list,moment_list,torque_list, moment_II_list, torque_I_list,stepsize)
+with open(filename,"wb") as f:
+    pickle.dump(saveObject, f)    
+    
 # check values
 print(force_list[0:5])
 print(force_list[-5:-1])
