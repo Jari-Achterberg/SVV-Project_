@@ -1,7 +1,7 @@
 # Making the integration_scheme
 from Coordinates import d, Nx, Nz, x_list, la
 from matplotlib import pyplot as plt
-
+import pickle
 
 def integral(x1, x2, y1, y2):
     # Calculating parameters for linear equation y = ax + b
