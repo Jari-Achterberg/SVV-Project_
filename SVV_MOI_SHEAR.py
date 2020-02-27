@@ -235,7 +235,7 @@ for qxb1sp in range (0,34):
     q1dis_b1sp = q1/((space+arcspace)*tsk+B1+B0) * (qxb1sp*(arcspace/34)*tsk+tsk*space+B1) # stringer 1 to spar
     sfr1.append(q1dis_b1sp)
 axes[0, 0].plot(sfr1)
-ssr1 = sfr1/tsk
+ssr1 = [x / tsk for x in sfr1]
 ### region 2
 sfr2 = []
 q2 = (qtb2 + q01 - q02)/10
@@ -243,7 +243,7 @@ for qxsp2 in range(0,100):
     q2dis_sp2 = q2/((ha/2)*tsp) * (qxsp2*ha/(2*steps)*tsp) #spar top to spar center
     sfr2.append(q2dis_sp2)
 axes[0, 1].plot(sfr2)
-ssr2 = sfr2/tsp
+ssr2 = [x / tsk for x in sfr2]
 ### region 3
 sfr3 = []
 q3 = (qtb3 + q02)/10
@@ -266,7 +266,7 @@ for qxb6TE in range (0,10):
     q3dis_b6TE = q3/((barspace+4.5*space)*tsk + 5*Bgen) * (qxb6TE*space/20*tsk+(barspace+space*4)*tsk+1*Bgen+5*Bgen) # stringer 6 to TE
     sfr3.append(q3dis_b6TE)
 axes[0, 2].plot(sfr3)
-ssr3 = sfr3/tsk
+ssr3 = [x / tsk for x in sfr3]
 ### region 4
 sfr4 = []
 q4 = (qtb4 + q02)/10
@@ -289,7 +289,7 @@ for qxb11sp in range (0,10):
     q4dis_b11sp = q4/((barspace+4.5*space)*tsk + 5*Bgen) * (qxb11sp*tsk*barspace/10+space*4.5*tsk+ 5*Bgen) # stringer 11 to spar
     sfr4.append(q4dis_b11sp)
 axes[1, 0].plot(sfr4)
-ssr4 = sfr4/tsk
+ssr4 = [x / tsk for x in sfr4]
 #region 5 
 sfr5 = []
 q5 = (qtb5 + q01 - q02)/10
@@ -297,7 +297,7 @@ for qxsp5 in range (0,100):
     q5dis_sp5 = q5/((ha/2)*tsp) * (qxsp5*ha/(2*steps)*tsp) #spar bottom to spar center
     sfr5.append(q5dis_sp5)
 axes[1, 1].plot(sfr5)
-ssr5 = sfr5/tsp
+ssr5 = [x / tsk for x in sfr5]
 ### region 6 
 sfr6 = []
 q6 = (qtb6 + q01)/10
@@ -307,7 +307,7 @@ for qxspb12 in range (0,34):
 for qxb12b0 in range (0,66):
     q6dis_b12b0 = q6/((space+arcspace)*tsk+B1+B0) * (qxb12b0*tsk*space/66+arcspace*tsk+B1) # spar 12 to stringer 0
     sfr6.append(q6dis_b12b0)
-ssr6 = sfr6/tsk
+ssr6 = [x / tsk for x in sfr6]
 axes[1, 2].plot(sfr6)
 figure.tight_layout()
 plt.show
