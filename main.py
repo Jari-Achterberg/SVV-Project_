@@ -35,6 +35,7 @@ G       = 28.0        # material shear moduus                        [GPa]
 
 
 # ================= Functions ===========================
+# MacCauley stepfunction
 def MC(x, a, e):
     if max((x-a), 0) == (x-a) and e > 0:
         return (x-a)**e
@@ -42,6 +43,8 @@ def MC(x, a, e):
         return 1
     else:
         return 0
+
+def Vq(x):
 
 
 # =================Geometrical properties of airfoil================
@@ -105,7 +108,7 @@ Mz_right      = lambda X :                             (P*m.sin(theta)*MC(X, x_I
 # A[0,11], A[0,12],   B[0]    =  -1, -m.tan(theta)                                       ,   0
 A[0, :],            B[0]    = np.array([1, 0, 1, 0, 1, 0, m.sin(theta), 0, 0, 0, 0, 0])                                                     ,   0 + V_q(X) - P*m.sin(theta)
 A[1, :],            B[1]    = np.array([0, 1, 0, 1, 0, 1, m.cos(theta), 0, 0, 0, 0, 0])                                                                                                  ,   0 -   Rz_right(la)
-A[2, :],            B[2]    = Mx_left(la)                                                                                                  ,   0 -   Mx_right(la)
+A[2, :],            B[2]    = T_left(la)                                                                                                  ,   0 -   T_right(la)
 A[3, :],            B[3]    = My_left(la)                                                                                                  ,   0 -   My_right(la)
 A[4, :],            B[4]    = Mz_left(la)                                                                                                  ,   0 -   Mz_right(la)
 A[5, :],            B[5]    = v_left(x1) + phi_left(x1)*z_h                             , d1*m.cos(theta) - v_right(x1) - phi_right(x1)*z_h
@@ -114,7 +117,7 @@ A[7, :],            B[7]    = v_left(x2) + phi_left(x2)*z_h                     
 A[8, :],            B[8]    = w_left(x2)                             , - w_right(x2)
 A[9, :],            B[9]    = v_left(x3) + phi_left(x3)*z_h                             , d3*m.cos(theta) - v_right(x3) - phi_right(x3)*z_h
 A[10, :],           B[10]   = w_left(x3)                             , d3*m.sin(theta) - w_right(x3)
-A[11, :],           B[11]   = m.sin(theta)*(u_left(x_I) - phi_left(x_I) * eta) - m.cos(theta)*(w_left(x_I) - phi_left(x_I)*ha/2)    ,   0 - m.sin(theta)*(u_right(x_I) - phi_right(x_I) * eta) - m.cos(theta)*( w_right(x_I) - phi_right(x_I)*ha/2)
+A[11, :],           B[11]   = m.sin(theta)*(u_left(x_I) - phi_left(x_I) * eta) - m.cos(theta)*(w_left(x_I) - phi_left(x_I)*ha/2)    ,   0 - m.sin(theta)*(u_right(x_I) - phi_right(x_I) * eta) - m.cos(theta)*(w_right(x_I) - phi_right(x_I)*ha/2)
 
 # Solve for A {var} = B
 var = np.linalg.solve(A, B)

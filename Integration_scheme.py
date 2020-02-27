@@ -55,7 +55,6 @@ def quadruple_integral(x1, x2, y1, y2):
 
     return intaxbvar
 '''
-xxxx_list, xxxxf_list, xxxxm_list =[], [], []
 
 index = 0
 line_load, torques = [], []
@@ -119,56 +118,50 @@ print(func_list)
 func_list_torque = compute_func_list(torques)
 
 
-for dd in [10, 1000000]:
 
-    force, moment, torque = 0, 0, 0
-    force_list, moment_list, torque_list = [], [], []
+force, moment, torque = 0, 0, 0
+force_list, moment_list, torque_list = [], [], []
 
-    # steps taken to estimate integral, can be changed
-    steps = dd
+# steps taken to estimate integral, can be changed
+steps = 1000000
 
-    # define length from first known value to last known value (what to do with the unknown part???
-    length = x_list[-1] - x_list[0]
-    # print("length: ", len(x_list))
-    stepsize = length/steps
+# define length from first known value to last known value (what to do with the unknown part???
+length = x_list[-1] - x_list[0]
+# print("length: ", len(x_list))
+stepsize = length/steps
 
-    # define func list
+# define func list
 
-    x_step_list = []
-    for i in range(steps):
-        # first find x in list:
-        # x value is step size times i ?? VERIFY
-        x_value = stepsize*i + x_list[0]
-        x_step_list.append(x_value)
-        for idx, elem in enumerate(x_list):
-            if elem > x_value:
-                func_idx = idx - 1
-                break
-        # x is found, now take the right dist func from func list
-        g, h = func_list[func_idx]
-        dist = g*x_value + h
+x_step_list = []
+for i in range(steps):
+    # first find x in list:
+    # x value is step size times i ?? VERIFY
+    x_value = stepsize*i + x_list[0]
+    x_step_list.append(x_value)
+    for idx, elem in enumerate(x_list):
+        if elem > x_value:
+            func_idx = idx - 1
+            break
+    # x is found, now take the right dist func from func list
+    g, h = func_list[func_idx]
+    dist = g*x_value + h
 
-        # calculate new force and moment using the current dist func
-        # force is basically the term that is needed for Sy
-        # moment is Mz
-        force = force + dist*stepsize
-        moment = moment + force*stepsize - dist*stepsize*stepsize/2
+    # calculate new force and moment using the current dist func
+    # force is basically the term that is needed for Sy
+    # moment is Mz
+    force = force + dist*stepsize
+    moment = moment + force*stepsize - dist*stepsize*stepsize/2
 
-        # append them to a list
-        force_list.append(force)
-        moment_list.append(moment)
+    # append them to a list
+    force_list.append(force)
+    moment_list.append(moment)
 
-        # compute torque integral
-        s, t = func_list_torque[func_idx]
-        dist2 = s*x_value + t
-        # same procedure, f
-        torque += dist2*stepsize
-        torque_list.append(torque)
-
-    print(len(x_step_list))
-    xxxx_list.append(x_step_list)
-    xxxxf_list.append(force_list)
-    xxxxm_list.append(moment_list)
+    # compute torque integral
+    s, t = func_list_torque[func_idx]
+    dist2 = s*x_value + t
+    # same procedure, f
+    torque += dist2*stepsize
+    torque_list.append(torque)
 
 # check values
 print(force_list[0:5])
@@ -176,15 +169,16 @@ print(force_list[-5:-1])
 #
 print(moment_list[0:5])
 print(moment_list[-5:-1])
-#
-print(len(xxxx_list[0]))
-print(len(xxxx_list[1]))
 
-plt.plot(xxxx_list[0], xxxxf_list[0])
-plt.plot(xxxx_list[1], xxxxf_list[1])
-plt.plot(xxxx_list[0], xxxxm_list[0])
-plt.plot(xxxx_list[1], xxxxm_list[1])
-plt.plot(xxxx_list[1], torque_list)
+###
+# v(x) contribution
+
+
+###
+plt.plot(x_step_list, force_list)
+plt.plot(x_step_list, moment_list)
+plt.plot(x_step_list, torque_list)
+
 plt.plot(x_list, line_load)
 plt.plot(x_list, torques)
 # plt.legend(labels=['moment z', 'shear force y', 'torque x', 'line_load along x', 'line torque along x'])

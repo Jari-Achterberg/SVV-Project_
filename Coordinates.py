@@ -62,7 +62,7 @@ print("maximum step size in x direction: ", max(xstep))
 print(sum(xstep)/len(xstep))
 print("average loading: ", sum(xzload_list)/len(xzload_list))
 # plot coordinates
-x_list.extend(x_list)
+#x_list.extend(x_list)
 # plt.scatter(xzx_list, xzz_list, c=xzload_list)
 # plt.scatter(xzx_list, xzload_list, c=xzload_list)
 # plt.xlabel('x')
