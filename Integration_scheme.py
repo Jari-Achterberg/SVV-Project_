@@ -13,7 +13,7 @@ def integral(x1, x2, y1, y2):
     # should be similar to: (y1 + y2)*(x2 - x1)/2
 
     # Integration scheme for f(x)=(ax+b)*x
-    xh = 0.0865
+    xh = 0.17679203  # distance from shear center
     intxaxbvar = (1/3)*a*(x2**3 - x1**3) + 0.5*(b-a*xh)*(x2**2-x1**2) - b*xh*(x2-x1)
 
     return intaxbvar, intxaxbvar
@@ -127,6 +127,8 @@ steps = 1000000
 
 # define length from first known value to last known value (what to do with the unknown part???
 length = x_list[-1] - x_list[0]
+print(x_list[0], x_list[-1])
+print(length)
 # print("length: ", len(x_list))
 stepsize = length/steps
 print("saaaa",stepsize)
