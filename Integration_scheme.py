@@ -129,8 +129,10 @@ steps = 1000000
 length = x_list[-1] - x_list[0]
 # print("length: ", len(x_list))
 stepsize = length/steps
-
+print("saaaa",stepsize)
 # define func list
+moment_I, moment_II, torque_I = 0, 0, 0
+moment_II_list, torque_I_list = [], []
 
 x_step_list = []
 for i in range(steps):
@@ -151,17 +153,23 @@ for i in range(steps):
     # moment is Mz
     force = force + dist*stepsize
     moment = moment + force*stepsize - dist*stepsize*stepsize/2
+    moment_I += moment*stepsize
+    moment_II += moment_I*stepsize
+
 
     # append them to a list
     force_list.append(force)
     moment_list.append(moment)
+    moment_II_list.append(moment_II)
 
     # compute torque integral
     s, t = func_list_torque[func_idx]
     dist2 = s*x_value + t
     # same procedure, f
     torque += dist2*stepsize
+    torque_I += torque*stepsize
     torque_list.append(torque)
+    torque_I_list.append(torque_I)
 
 # check values
 print(force_list[0:5])
@@ -172,16 +180,19 @@ print(moment_list[-5:-1])
 
 ###
 # v(x) contribution
+#for k in range(len(x_step_list)):
 
 
 ###
 plt.plot(x_step_list, force_list)
 plt.plot(x_step_list, moment_list)
 plt.plot(x_step_list, torque_list)
+plt.plot(x_step_list, torque_I_list)
+plt.plot(x_step_list, moment_II_list)
 
-plt.plot(x_list, line_load)
-plt.plot(x_list, torques)
-# plt.legend(labels=['moment z', 'shear force y', 'torque x', 'line_load along x', 'line torque along x'])
+# plt.plot(x_list, line_load)
+# plt.plot(x_list, torques)
+plt.legend(labels=['shear force y','moment z', 'torque x', 'torque x int', 'moment z int2']) # , 'line_load along x', 'line torque along x'])
 plt.xlabel('x')
 plt.ylabel('magnitude')
 plt.show()
