@@ -9,6 +9,7 @@ import math as m
 import numpy as np
 import pickle
 import scipy as sp
+import matplotlib.pyplot as plt
 
 #  ===================== Input Parameters: ====================== 
 #To be inputed in the indicated units.
@@ -97,9 +98,9 @@ def T_q_II(x):
     return T_q_II
 
 # =================Geometrical properties of airfoil================
-eta = Ca/4  # Preliminary value for shear center, input correct one or call function here.
-Iyy = 1     # Preliminary values for MoI, input correct values or call functions here.
-Izz = 1
+eta = 0.17679203  # Shear center, input correct one or call function here.
+Iyy = 3.6906194387807746*10**-5                       # Preliminary values for MoI, input correct values or call functions here.
+Izz = 5.81593895759915*10**-6 # Value from verification model
 J= 0.05176  # [m^4]
 
 # ========================================================================
@@ -172,7 +173,9 @@ A[11, :],           B[11]   = m.sin(theta)*(v_left(x_I) - phi_left(x_I) * eta) -
 #var = sp.sparse.linalg.spsolve(A, B)
 var = np.linalg.solve(A, B)
 R1y, R1z, R2y, R2z, R3y, R3z, R_I, C1, C2, C3, C4, C5 = var        # Note: u0 = Cu0/(EIzz), v0 = Cv0/(EIyy), theta0 = Ctheta0/(GJ)
-
+#---------------------------------------------------------------------------------------------------------------------
+#     =====================Set up Moment, Shear and deflection equations=======================
+ 
 T = lambda x:      np.sum(T_left(x)*var)         + T_right(x)
 My = lambda x: np.sum(My_left(x)*var)         + My_right(x)
 Mz = lambda x: np.sum(Mz_left(x)*var)         + Mz_right(x)
@@ -183,3 +186,29 @@ V  = lambda x: m.cos(theta)*(v(x) + phi(x)*z_h) + m.sin(theta)*(w(x)+ha/2*phi(x)
 # W       = -m.sin(theta)*(u - theta*(z_h) ) + m.cos(theta)*v
 Sy = lambda X : - R1y*MC(X,x1,0) - R2y*MC(X,x2,0) - R3y*MC(X,x3,0) - R_I*m.sin(theta)*MC(X,x_I,0) + P*m.sin(theta)*MC(X,x_II,0) + V_q(X)
 Sz = lambda X : R1z*MC(X,x1,0)+  R2z*MC(X,x2,0)+ R3z*MC(X,x3,0) -R_I*m.cos(theta)*MC(X,x_I,0) + P*m.cos(theta)*MC(X,x_II,0)  
+
+
+x_stress = np.linspace(0, la, 100) 
+Sy_plot =[]
+Sz_plot=[]
+for xi in x_stress:
+    np.append(Sy_plot,Sy(xi))
+    np.append(Sz_plot,Sz(xi))
+print(Sy_plot,Sz_plot)
+#Sy_plot=map(Sy, la/range(100))
+plt.plot(map(Sy_plot, x_stress))
+plt.plot(map(Sz_plot, x_stress))
+# ======================Stress Calculations==========================
+stepx = 1000 # Number of steps in spanwise direction (x)
+#========================Bending Stress==============================
+#def sigma_y(x): 
+#    sig_y = 
+#    return sig_y
+#def sigma_x(x):
+#    sig_x = 
+#    return sig_x
+
+#for i in stepx:
+ #   x = la/stepx*i
+#========================Shear Stress================================
+  #  Tau_xy(x) = #Call shear stress calculation here for a given x position.
