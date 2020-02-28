@@ -158,30 +158,33 @@ My_right      = lambda X :                             (P*m.cos(theta)*MC(X, x_I
 Mz_left      = lambda X :                     np.array([-MC(X, x1, 1), 0, -MC(X, x2, 1), 0, -MC(X, x3, 1), 0,  -m.sin(theta)*MC(X, x_I, 1), 0, 0, 0, 0, 0])
 Mz_right      = lambda X :                             (P*m.sin(theta)*MC(X, x_II, 1) + M_q(X))
 
-# Row 1 -5  :  Force and Moment Equilibrium around x = la
-# Row 6 -7  :  Hinge 1 Deflection Constraint
-# Row 8 -9 :  Hinge 2 Deflection Constraint
-# Row 10-11 :  Hinge 3 Deflection Constraint
-# Row 12    :  Actuator Deflection Constraint
 
-# A[0,11], A[0,12],   B[0]    =  -1, -m.tan(theta)                                       ,   0
-A[0, :],            B[0]    = np.array([1, 0, 1, 0, 1, 0, m.sin(theta), 0, 0, 0, 0, 0])                                                     ,   0 + V_q(la) - P*m.sin(theta)
-A[1, :],            B[1]    = np.array([0, 1, 0, 1, 0, 1, m.cos(theta), 0, 0, 0, 0, 0])                                                                                                  ,   0 
-A[2, :],            B[2]    = T_left(la)                                                                                                  ,   0 -   T_right(la)
-A[3, :],            B[3]    = My_left(la)                                                                                                  ,   0 -   My_right(la)
-A[4, :],            B[4]    = Mz_left(la)                                                                                                  ,   0 -   Mz_right(la)
-A[5, :],            B[5]    = v_left(x1) + phi_left(x1)*z_h                             , d1*m.cos(theta) - v_right(x1) - phi_right(x1)*z_h
-A[6, :],            B[6]    = w_left(x1)                             , d1*m.sin(theta) - w_right(x1)
-A[7, :],            B[7]    = v_left(x2) + phi_left(x2)*z_h                             , - v_right(x2) - phi_right(x2)*z_h
-A[8, :],            B[8]    = w_left(x2)                             , - w_right(x2)
-A[9, :],            B[9]    = v_left(x3) + phi_left(x3)*z_h                             , d3*m.cos(theta) - v_right(x3) - phi_right(x3)*z_h
-A[10, :],           B[10]   = w_left(x3)                             , d3*m.sin(theta) - w_right(x3)
-A[11, :],           B[11]   = m.sin(theta)*(v_left(x_I) - phi_left(x_I) * eta) - m.cos(theta)*(w_left(x_I) - phi_left(x_I)*ha/2)    ,   0 - m.sin(theta)*(v_right(x_I) - phi_right(x_I) * eta) - m.cos(theta)*(w_right(x_I) - phi_right(x_I)*ha/2)
+
+# Set up matrix A:
+
+
+# Rows 1 to 5:  Force and Moment Equilibrium around x = la
+A[0, :],B[0]    = np.array([1, 0, 1, 0, 1, 0, m.sin(theta), 0, 0, 0, 0, 0])                                                     ,   0 + V_q(la) - P*m.sin(theta)
+A[1, :],B[1]    = np.array([0, 1, 0, 1, 0, 1, m.cos(theta), 0, 0, 0, 0, 0])                                                                                                  ,   0 
+A[2, :],B[2]    = T_left(la)                                                                                                  ,   0 -   T_right(la)
+A[3, :],B[3]    = My_left(la)                                                                                                  ,   0 -   My_right(la)
+A[4, :],B[4]    = Mz_left(la)                                                                                                  ,   0 -   Mz_right(la)
+# Rows 6 & 7:  Hinge 1 Deflection Constraints
+A[5, :],B[5]    = v_left(x1) + phi_left(x1)*z_h                             , d1*m.cos(theta) - v_right(x1) - phi_right(x1)*z_h
+A[6, :],B[6]    = w_left(x1)                             , d1*m.sin(theta) - w_right(x1)
+# Rows 8 & 9:  Hinge 2 Deflection Constraints
+A[7, :],B[7]    = v_left(x2) + phi_left(x2)*z_h                             , - v_right(x2) - phi_right(x2)*z_h
+A[8, :],B[8]    = w_left(x2)                             , - w_right(x2)
+# Rows 10-11:  Hinge 3 Deflection Constraints
+A[9, :],B[9]    = v_left(x3) + phi_left(x3)*z_h                             , d3*m.cos(theta) - v_right(x3) - phi_right(x3)*z_h
+A[10, :],B[0]   = w_left(x3)                             , d3*m.sin(theta) - w_right(x3)
+# Row 12    :  Jammed Actuator Deflection Constraint
+A[11, :],B[11]   = m.sin(theta)*(v_left(x_I) - phi_left(x_I) * eta) - m.cos(theta)*(w_left(x_I) - phi_left(x_I)*ha/2)    ,   0 - m.sin(theta)*(v_right(x_I) - phi_right(x_I) * eta) - m.cos(theta)*(w_right(x_I) - phi_right(x_I)*ha/2)
 
 # Solve for A {var} = B
 #var = sp.sparse.linalg.spsolve(A, B)
 var = np.linalg.solve(A, B)
-R1y, R1z, R2y, R2z, R3y, R3z, R_I, C1, C2, C3, C4, C5 = var        # Note: u0 = Cu0/(EIzz), v0 = Cv0/(EIyy), theta0 = Ctheta0/(GJ)
+R1y, R1z, R2y, R2z, R3y, R3z, R_I, C1, C2, C3, C4, C5 = var       
 #---------------------------------------------------------------------------------------------------------------------
 #     =====================Set up Moment, Shear and deflection equations=======================
  
@@ -230,13 +233,12 @@ plt.show()
 x_stress = list(x_stress)
 
 #plt.plot(x_stress, Sy_plot)
-print(max(v_plot), x_stress[v_plot.index(max(v_plot))])
-print(max(w_plot), x_stress[w_plot.index(max(w_plot))])
-#print(max(S_sum), x_stress[S_sum.index(max(S_sum))])
+print(max(Sy_plot), x_stress[Sy_plot.index(max(Sy_plot))])
+print(max(Sz_plot), x_stress[Sz_plot.index(max(Sz_plot))])
+print(max(S_sum), x_stress[S_sum.index(max(S_sum))])
 #plt.plot(x_stress, Sz_plot)
 
 plt.figure( figsize = (16,9))
-plt.grid
 
 plt.subplot(121)
 plt.subplot(121).set_xlim(0,la)
@@ -257,6 +259,7 @@ plt.show()
 plt.figure( figsize = (16,9))
 plt.grid
 plt.subplot(121)
+plt.subplot(121).set_xlim(0,la)
 plt.plot(x_stress, w_plot)
 #plt.title('S')
 plt.xlabel('x - Position [m]')
@@ -273,6 +276,7 @@ plt.show()
 plt.figure( figsize = (16,9))
 plt.grid
 plt.subplot(121)
+plt.subplot(121).set_xlim(0,la)
 plt.plot(x_stress, phi_plot)
 #plt.title('S')
 plt.xlabel('x - Position [m]')
