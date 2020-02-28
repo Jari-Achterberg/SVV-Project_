@@ -202,12 +202,14 @@ Sy_plot =[]
 Sz_plot=[]
 My_plot=[]
 Mz_plot=[]
+T_plot=[]
 v_plot= []
 w_plot=[]
 phi_plot=[]
 for xi in x_stress:
     Sy_plot.append(Sy(xi))
     Sz_plot.append(Sz(xi))
+    T_plot.append(T(xi))
     My_plot.append(My(xi))
     Mz_plot.append(Mz(xi))
     v_plot.append(v(xi))
@@ -223,9 +225,11 @@ print(max(w_plot), x_stress[w_plot.index(max(w_plot))])
 print(max(S_sum), x_stress[S_sum.index(max(S_sum))])
 #plt.plot(x_stress, Sz_plot)
 
-plt.figure( figsize = (18,6))
+plt.figure( figsize = (16,9))
+plt.grid
 
-plt.subplot(221)
+plt.subplot(121)
+plt.subplot(121).set_xlim(0,la)
 plt.plot(x_stress, v_plot )
 #plt.title('S')
 plt.xlabel('x - Position [m]')
@@ -233,9 +237,42 @@ plt.ylabel('Vertical deflection, v [m]')
 plt.tight_layout()
 
 plt.subplot(122)
+plt.plot(x_stress, Mz_plot)
+plt.xlabel('x - Position [m]')
+plt.ylabel('Bending moment about z, $M_{z}(x)$ [m]')
+plt.tight_layout()
+plt.show()
+
+
+plt.figure( figsize = (16,9))
+plt.grid
+plt.subplot(121)
 plt.plot(x_stress, w_plot)
+#plt.title('S')
 plt.xlabel('x - Position [m]')
 plt.ylabel('Horizontal deflection, w [m]')
+plt.tight_layout()
+
+plt.subplot(122)
+plt.plot(x_stress, My_plot)
+plt.xlabel('x - Position [m]')
+plt.ylabel('Bending moment about y, $M_{y}(x)$ [m]')
+plt.tight_layout()
+plt.show()
+
+plt.figure( figsize = (16,9))
+plt.grid
+plt.subplot(121)
+plt.plot(x_stress, phi_plot)
+#plt.title('S')
+plt.xlabel('x - Position [m]')
+plt.ylabel('Twist angle $\phi$ [m]')
+plt.tight_layout()
+
+plt.subplot(122)
+plt.plot(x_stress, T_plot)
+plt.xlabel('x - Position [m]')
+plt.ylabel('Bending moment about x, $T_{x}(x)$ [m]')
 plt.tight_layout()
 
 #plt.subplot(133)
