@@ -32,8 +32,8 @@ d3 = 0.02030           # vertical deflection hinge 3                  [m]
 theta = m.radians(26)  # aileron - wing angle                        [rad]
 P = 37.9*1000          # actuator II load                             [N]
 
-E       = 70        # material Young's modulus                       [GPa]
-G       = 28.0        # material shear moduus                        [GPa]
+E      = 72.9*10**9        # material Young's modulus                     [GPa]
+G      = 27.1*10**9        # material shear moduus                        [GPa]
 # rho     = 2780        # material density                            [kg m^-3]
 
 
@@ -64,6 +64,8 @@ def V_q(x):
 
 def M_q(x):
     index = round(x / stepsize)
+    index = int(index)
+    
     if x<0.0012404325495737286:
         index = 0
     if x>1.6897595674504262:
@@ -73,6 +75,8 @@ def M_q(x):
 
 def T_q(x):
     index = round(x / stepsize)
+    index = int(index)
+    
     if x<0.0012404325495737286:
         index = 0
     if x>1.6897595674504262:
@@ -82,6 +86,8 @@ def T_q(x):
 
 def M_qII(x):
     index = round(x / stepsize)
+    index = int(index)
+    
     if x<0.0012404325495737286:
         index = 0
     if x>1.6897595674504262:
@@ -91,6 +97,8 @@ def M_qII(x):
 
 def T_q_II(x):
     index = round(x / stepsize)
+    index = int(index)
+    
     if x<0.0012404325495737286:
         index = 0
     if x>1.6897595674504262:
@@ -192,43 +200,49 @@ Sz = lambda X : R1z*MC(X,x1,0)+  R2z*MC(X,x2,0)+ R3z*MC(X,x3,0) -R_I*m.cos(theta
 x_stress = np.linspace(0, la, 100) 
 Sy_plot =[]
 Sz_plot=[]
+My_plot=[]
+Mz_plot=[]
+v_plot= []
+w_plot=[]
+phi_plot=[]
 for xi in x_stress:
     Sy_plot.append(Sy(xi))
     Sz_plot.append(Sz(xi))
-
+    My_plot.append(My(xi))
+    Mz_plot.append(Mz(xi))
+    v_plot.append(v(xi))
+    w_plot.append(w(xi))
+    phi_plot.append(phi(xi))
+    
 #Sy_plot=map(Sy, la/range(100))
 x_stress = list(x_stress)
-S_sum=[]
-for i in range(len(x_stress)):
-    S_sum.append(Sy_plot[i]+Sz_plot[i])
-print(len(S_sum))
 
 #plt.plot(x_stress, Sy_plot)
-print(max(Sy_plot), x_stress[Sy_plot.index(max(Sy_plot))])
-print(max(Sz_plot), x_stress[Sz_plot.index(max(Sz_plot))])
+print(max(v_plot), x_stress[v_plot.index(max(v_plot))])
+print(max(w_plot), x_stress[w_plot.index(max(w_plot))])
 print(max(S_sum), x_stress[S_sum.index(max(S_sum))])
 #plt.plot(x_stress, Sz_plot)
 
 plt.figure( figsize = (18,6))
 
-plt.subplot(131)
-plt.plot(x_stress, Sy_plot, )
+plt.subplot(221)
+plt.plot(x_stress, v_plot )
 #plt.title('S')
 plt.xlabel('x - Position [m]')
-plt.ylabel('Shear Force in y - direction [N]')
+plt.ylabel('Vertical deflection, v [m]')
 plt.tight_layout()
 
-plt.subplot(132)
-plt.plot(x_stress, Sz_plot)
+plt.subplot(122)
+plt.plot(x_stress, w_plot)
 plt.xlabel('x - Position [m]')
-plt.ylabel('Shear Force in z - direction [N]')
+plt.ylabel('Horizontal deflection, w [m]')
 plt.tight_layout()
 
-plt.subplot(133)
-plt.plot(x_stress, S_sum)
-plt.xlabel('x - Position [m]')
-plt.ylabel('Sum of shears')
-plt.tight_layout()
+#plt.subplot(133)
+#plt.plot(x_stress, M_qplot)
+#plt.xlabel('x - Position [m]')
+#plt.ylabel('vertical deflection')
+#plt.tight_layout()
 plt.show()
 
 # ======================Stress Calculations==========================
