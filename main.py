@@ -221,7 +221,7 @@ for xi in x_stress:
 
 filename='forces_moment_verification'
 with open(filename, "rb") as f:
-    Sy_list,Sz_list,My_list,Mz_list,T_list = pickle.load(f)
+    Sy_list,Sz_list,My_list,Mz_list,T_list,defl_y,defl_z = pickle.load(f)
     #kut = pickle.load(f)
 
 # Plotting results our own numerical model with results verification model
@@ -242,7 +242,7 @@ plt.figure( figsize = (16,9))
 
 plt.subplot(121)
 plt.subplot(121).set_xlim(0,la)
-plt.plot(x_stress, v_plot, 'k', x_stress, v_list, 'b')
+plt.plot(x_stress, v_plot, 'k', x_stress, defl_y, 'b')
 #plt.title('S')
 plt.xlabel('x - Position [m]')
 plt.ylabel('Vertical deflection, v [m]')
@@ -260,7 +260,7 @@ plt.figure( figsize = (16,9))
 plt.grid
 plt.subplot(121)
 plt.subplot(121).set_xlim(0,la)
-plt.plot(x_stress, w_plot, 'k', x_stress, w_list, 'b')
+plt.plot(x_stress, w_plot, 'k', x_stress, defl_z, 'b')
 #plt.title('S')
 plt.xlabel('x - Position [m]')
 plt.ylabel('Horizontal deflection, w [m]')
