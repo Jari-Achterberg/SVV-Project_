@@ -58,7 +58,7 @@ def V_q(x):
         index = 0
     if x>1.6897595674504262:
         index = -1
-    print(index)
+    # print(index)
     Vq = force_list[index]
     return Vq
 
@@ -193,12 +193,14 @@ x_stress = np.linspace(0, la, 100)
 Sy_plot =[]
 Sz_plot=[]
 for xi in x_stress:
-    np.append(Sy_plot,Sy(xi))
-    np.append(Sz_plot,Sz(xi))
-print(Sy_plot,Sz_plot)
+    Sy_plot.append(Sy(xi))
+    Sz_plot.append(Sz(xi))
+
 #Sy_plot=map(Sy, la/range(100))
-plt.plot(map(Sy_plot, x_stress))
-plt.plot(map(Sz_plot, x_stress))
+x_stress = list(x_stress)
+plt.plot(x_stress, Sy_plot)
+plt.plot(x_stress, Sz_plot)
+plt.show()
 # ======================Stress Calculations==========================
 stepx = 1000 # Number of steps in spanwise direction (x)
 #========================Bending Stress==============================
