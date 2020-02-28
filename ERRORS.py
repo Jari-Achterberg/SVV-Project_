@@ -41,6 +41,13 @@ from SVV_MOI_SHEAR import sfr5
 from main import sfveri5
 from SVV_MOI_SHEAR import sfr6
 from main import sfveri6
+#%%
+from SVV_MOI_SHEAR import q1
+from SVV_MOI_SHEAR import q2
+from SVV_MOI_SHEAR import q3
+from SVV_MOI_SHEAR import q4
+from SVV_MOI_SHEAR import q5
+from SVV_MOI_SHEAR import q6
 #%% 
 ### Region 1 
 ERROR_R1 = []
@@ -48,10 +55,11 @@ SFR1_MSER = 0
 SFR1_Error = [0]*len(sfr1)
 figure1, axes = plt.subplots(nrows=2, ncols=3)
 for i in range (0,len(sfr1)):
-    SFR1_MSER += 1/(steps)*((abs(sfr1[i])-abs(sfveri1[i]))**2)  #mean squared error
-    SFR1_Error[i] = abs((sfr1[i])-(sfveri1[i]))                  #errorplot
+    SFR1_MSER += 1/(steps)*((abs(q1)-abs(sfveri1[i]))**2)  #mean squared error
+    SFR1_Error[i] = abs(q1-(sfveri1[i]))                  #errorplot
     ERROR_R1.append(SFR1_Error[i])
-figure1, axes[0, 0].plot(ERROR_R1)       
+figure1, axes[0, 0].plot(ERROR_R1) 
+SFR1_MSER = SFR1_MSER/steps      
 #axes[0, 1].plot(sfr1) # = 1 means correct /= -1 means incorrect
 #figure.tight_layout()
 #plt.show()
@@ -64,50 +72,54 @@ SFR2_MSER = 0
 SFR2_Error = [0]*len(sfr2)
 #figure, axes = plt.subplots(nrows=1, ncols=2)
 for i in range (0,len(sfr2)):
-    SFR2_MSER += 1/(steps)*((abs(sfr2[i])-abs(sfveri2[i]))**2)  #mean squared error
-    SFR2_Error[i] = abs((sfr2[i])-(sfveri2[i]))                  #errorplot
+    SFR2_MSER += 1/(steps)*((abs(q2)-abs(sfveri2[i]))**2)  #mean squared error
+    SFR2_Error[i] = -(q2-(sfveri2[i]))                  #errorplot
     ERROR_R2.append(SFR2_Error[i])
-figure1,axes[0, 1].plot(ERROR_R2)           
+figure1,axes[0, 1].plot(ERROR_R2) 
+SFR2_MSER = SFR2_MSER/steps          
 ### Region 3 
 ERROR_R3 = []
 SFR3_MSER = 0
 SFR3_Error = [0]*len(sfr3)
 #figure, axes = plt.subplots(nrows=1, ncols=2)
 for i in range (0,len(sfr3)):
-    SFR3_MSER += 1/(steps)*((abs(sfr3[i])-abs(sfveri3[i]))**2)  #mean squared error
-    SFR3_Error[i] = abs((sfr3[i])-(sfveri3[i]))                  #errorplot
+    SFR3_MSER += 1/(steps)*((abs(q3)-abs(sfveri3[i]))**2)  #mean squared error
+    SFR3_Error[i] = -(q3-(sfveri3[i]))                  #errorplot
     ERROR_R3.append(SFR3_Error[i])
-figure1,axes[0, 2].plot(ERROR_R3)    
+figure1,axes[0, 2].plot(ERROR_R3)
+SFR3_MSER = SFR3_MSER/steps    
 ### Region 4 
 ERROR_R4 = []
 SFR4_MSER = 0
 SFR4_Error = [0]*len(sfr4)
 #figure, axes = plt.subplots(nrows=1, ncols=2)
 for i in range (0,len(sfr4)):
-    SFR4_MSER += 1/(steps)*((abs(sfr4[i])-abs(sfveri4[i]))**2)  #mean squared error
-    SFR4_Error[i] = abs((sfr4[i])-(sfveri4[i]))                  #errorplot
+    SFR4_MSER += 1/(steps)*((abs(q4)-abs(sfveri4[i]))**2)  #mean squared error
+    SFR4_Error[i] = -(q4-(sfveri4[i]))                  #errorplot
     ERROR_R4.append(SFR4_Error[i])
-figure1,axes[1, 0].plot(ERROR_R4)          
+figure1,axes[1, 0].plot(ERROR_R4)  
+SFR4_MSER = SFR4_MSER/steps        
 ### Region 5 
 ERROR_R5 = []
 SFR5_MSER = 0
 SFR5_Error = [0]*len(sfr5)
 #figure, axes = plt.subplots(nrows=1, ncols=2)
 for i in range (0,len(sfr5)):
-    SFR5_MSER += 1/(steps)*((abs(sfr5[i])-abs(sfveri5[i]))**2)  #mean squared error
-    SFR5_Error[i] = (abs(sfr5[i])-abs(sfveri5[i]))                  #errorplot
+    SFR5_MSER += ((abs(q5)-abs(sfveri5[i]))**2)  #mean squared error
+    SFR5_Error[i] = -(q5-(sfveri5[i]))                  #errorplot
     ERROR_R5.append(SFR5_Error[i])
+SFR5_MSER = SFR5_MSER/steps
 figure1,axes[1, 1].plot(ERROR_R5)     
 ### Region 6
 ERROR_R6 = []
 SFR6_MSER = 0
 SFR6_Error = [0]*len(sfr6)
 for i in range (0,len(sfr6)):
-    SFR6_MSER += 1/(steps)*((abs(sfr6[i])-abs(sfveri6[i]))**2)  #mean squared error
-    SFR6_Error[i] = abs((sfr6[i])-(sfveri6[i]))                  #errorplot
+    SFR6_MSER += ((abs(q6)-abs(sfveri6[i]))**2)  #mean squared error
+    SFR6_Error[i] = -(q6-(sfveri6[i]))                  #errorplot
     ERROR_R6.append(SFR6_Error[i])
 figure1,axes[1, 2].plot(ERROR_R6)         
-
+SFR6_MSER = SFR6_MSER/steps
 #%% region 1 to 6 direction graphs
 figure2, axes = plt.subplots(nrows=2, ncols=3)
 DIRECTION_R1 = []
