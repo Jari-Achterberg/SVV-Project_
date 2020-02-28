@@ -215,14 +215,24 @@ for xi in x_stress:
     v_plot.append(v(xi))
     w_plot.append(w(xi))
     phi_plot.append(phi(xi))
-    
+
+filename='forces_moment_verification'
+with open(filename, "rb") as f:
+    Sy_list,Sz_list,My_list,Mz_list,T_list = pickle.load(f)
+    #kut = pickle.load(f)
+
+# Plotting results our own numerical model with results verification model
+plt.figure()
+plt.plot(x_stress,Sy_plot,'b',x_stress,Sy_list,'b')
+plt.show()
+
 #Sy_plot=map(Sy, la/range(100))
 x_stress = list(x_stress)
 
 #plt.plot(x_stress, Sy_plot)
 print(max(v_plot), x_stress[v_plot.index(max(v_plot))])
 print(max(w_plot), x_stress[w_plot.index(max(w_plot))])
-print(max(S_sum), x_stress[S_sum.index(max(S_sum))])
+#print(max(S_sum), x_stress[S_sum.index(max(S_sum))])
 #plt.plot(x_stress, Sz_plot)
 
 plt.figure( figsize = (16,9))
@@ -237,7 +247,7 @@ plt.ylabel('Vertical deflection, v [m]')
 plt.tight_layout()
 
 plt.subplot(122)
-plt.plot(x_stress, Mz_plot)
+plt.plot(x_stress, Mz_plot, 'k',x_stress,Mz_list, 'b')
 plt.xlabel('x - Position [m]')
 plt.ylabel('Bending moment about z, $M_{z}(x)$ [m]')
 plt.tight_layout()
@@ -254,7 +264,7 @@ plt.ylabel('Horizontal deflection, w [m]')
 plt.tight_layout()
 
 plt.subplot(122)
-plt.plot(x_stress, My_plot)
+plt.plot(x_stress, My_plot,'k',x_stress,My_list,'b')
 plt.xlabel('x - Position [m]')
 plt.ylabel('Bending moment about y, $M_{y}(x)$ [m]')
 plt.tight_layout()
@@ -270,7 +280,7 @@ plt.ylabel('Twist angle $\phi$ [m]')
 plt.tight_layout()
 
 plt.subplot(122)
-plt.plot(x_stress, T_plot)
+plt.plot(x_stress, T_plot, 'k', x_stress, T_list,'b')
 plt.xlabel('x - Position [m]')
 plt.ylabel('Bending moment about x, $T_{x}(x)$ [m]')
 plt.tight_layout()
