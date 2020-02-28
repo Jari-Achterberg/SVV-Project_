@@ -198,7 +198,7 @@ for xi in x_stress:
 
 #Sy_plot=map(Sy, la/range(100))
 x_stress = list(x_stress)
-plt.plot(x_stress, Sy_plot)
+ # plt.plot(x_stress, Sy_plot)
 plt.plot(x_stress, Sz_plot)
 plt.show()
 # ======================Stress Calculations==========================
