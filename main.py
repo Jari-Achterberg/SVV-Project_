@@ -43,7 +43,7 @@ def MC(x, a, e):
     if max((x-a), 0) == (x-a):
         return (x-a)**e
     elif max((x-a), 0) > (x-a):
-        return 0**e
+        return 0
 
 
 # ================ Aerodynamic Loading ==================
@@ -198,9 +198,39 @@ for xi in x_stress:
 
 #Sy_plot=map(Sy, la/range(100))
 x_stress = list(x_stress)
- # plt.plot(x_stress, Sy_plot)
+S_sum=[]
+for i in range(len(x_stress)):
+    S_sum.append(Sy_plot[i]+Sz_plot[i])
+print(len(S_sum))
+
+#plt.plot(x_stress, Sy_plot)
+print(max(Sy_plot), x_stress[Sy_plot.index(max(Sy_plot))])
+print(max(Sz_plot), x_stress[Sz_plot.index(max(Sz_plot))])
+print(max(S_sum), x_stress[S_sum.index(max(S_sum))])
+#plt.plot(x_stress, Sz_plot)
+
+plt.figure( figsize = (18,6))
+
+plt.subplot(131)
+plt.plot(x_stress, Sy_plot, )
+#plt.title('S')
+plt.xlabel('x - Position [m]')
+plt.ylabel('Shear Force in y - direction [N]')
+plt.tight_layout()
+
+plt.subplot(132)
 plt.plot(x_stress, Sz_plot)
+plt.xlabel('x - Position [m]')
+plt.ylabel('Shear Force in z - direction [N]')
+plt.tight_layout()
+
+plt.subplot(133)
+plt.plot(x_stress, S_sum)
+plt.xlabel('x - Position [m]')
+plt.ylabel('Sum of shears')
+plt.tight_layout()
 plt.show()
+
 # ======================Stress Calculations==========================
 stepx = 1000 # Number of steps in spanwise direction (x)
 #========================Bending Stress==============================
