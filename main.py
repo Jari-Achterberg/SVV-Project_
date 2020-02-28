@@ -52,7 +52,8 @@ with open(filename, "rb") as f:
     force_list,moment_list,torque_list, moment_II_list, torque_I_list, stepsize = pickle.load(f)
 
 def V_q(x):
-    index = round(x/stepsize)
+    index = round(x / stepsize)
+    index = int(index)
     if x<0.0012404325495737286:
         index = 0
     if x>1.6897595674504262:
