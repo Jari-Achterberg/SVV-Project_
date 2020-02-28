@@ -8,4 +8,5 @@ Created on Fri Feb 28 12:27:23 2020
 # Main code verification
 #Verification of linear system
 
-ver = open("C:\Users\SID DrW\Documents\TUDelft\2019-20 Quarter 3\Sim. Verif. & Valid\Verification model","r")
+import 'C:\Users\SID DrW\Documents\TUDelft\2019-20 Quarter 3\Sim. Verif. & Valid\Verification model\main.py'
+    print ( Sy_v, Sz_v, My_v,Mz_v, T_v, tau_v)
