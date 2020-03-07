@@ -3,6 +3,7 @@ from Coordinates import d, Nx, Nz, x_list, la
 from matplotlib import pyplot as plt
 import pickle
 
+
 def integral(x1, x2, y1, y2):
     # Calculating parameters for linear equation y = ax + b
     a = (y2-y1)/(x2-x1)
@@ -117,8 +118,6 @@ func_list = compute_func_list(line_load)
 print(func_list)
 func_list_torque = compute_func_list(torques)
 
-
-
 force, moment, torque = 0, 0, 0
 force_list, moment_list, torque_list = [], [], []
 
@@ -158,7 +157,6 @@ for i in range(steps):
     moment_I += moment*stepsize
     moment_II += moment_I*stepsize
 
-
     # append them to a list
     force_list.append(force)
     moment_list.append(moment)
@@ -173,9 +171,9 @@ for i in range(steps):
     torque_list.append(torque)
     torque_I_list.append(torque_I)
 
-filename='aeroloading'
-saveObject = (force_list,moment_list,torque_list, moment_II_list, torque_I_list,stepsize)
-with open(filename,"wb") as f:
+filename = 'aeroloading_737'
+saveObject = (force_list, moment_list, torque_list, moment_II_list, torque_I_list, stepsize)
+with open(filename, "wb") as f:
     pickle.dump(saveObject, f)    
     
 # check values
@@ -186,11 +184,6 @@ print(moment_list[0:5])
 print(moment_list[-5:-1])
 
 ###
-# v(x) contribution
-#for k in range(len(x_step_list)):
-
-
-###
 plt.plot(x_step_list, force_list)
 plt.plot(x_step_list, moment_list)
 plt.plot(x_step_list, torque_list)
@@ -199,7 +192,8 @@ plt.plot(x_step_list, moment_II_list)
 
 # plt.plot(x_list, line_load)
 # plt.plot(x_list, torques)
-plt.legend(labels=['shear force y','moment z', 'torque x', 'torque x int', 'moment z int2']) # , 'line_load along x', 'line torque along x'])
+plt.legend(labels=['shear force y', 'moment z', 'torque x', 'torque x int', 'moment z int2'])
+# , 'line_load along x', 'line torque along x'])
 plt.xlabel('x')
 plt.ylabel('magnitude')
 plt.show()
