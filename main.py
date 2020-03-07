@@ -216,8 +216,8 @@ for xi in x_stress:
     T_plot.append(T(xi))
     My_plot.append(My(xi))
     Mz_plot.append(Mz(xi))
-    v_plot.append(v(xi))
-    w_plot.append(w(xi))
+    v_plot.append(-v(xi)*np.cos(26 / 180 * np.pi) + w(xi)*np.sin(26 / 180 * np.pi))
+    w_plot.append(w(xi)*np.cos(26 / 180 * np.pi)-v(xi)*np.sin(26 / 180 * np.pi))
     phi_plot.append(phi(xi))
 
 filename='forces_moment_verification'
