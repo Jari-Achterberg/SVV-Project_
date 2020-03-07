@@ -110,7 +110,8 @@ def T_q_II(x):
 eta = 0.17679203  # Shear center, input correct one or call function here.
 Iyy = 3.6906194387807746*10**-5                       # Preliminary values for MoI, input correct values or call functions here.
 Izz = 5.81593895759915*10**-6 # Value from verification model
-J= 0.05176  # [m^4]
+# J= 0.05176# [m^4]
+J = 2.3*10**-5
 
 # ========================================================================
 # =========== Solve Reaction forces, moments and deflections:  =========== 
@@ -225,9 +226,8 @@ with open(filename, "rb") as f:
     #kut = pickle.load(f)
 
 # Plotting results our own numerical model with results verification model
-plt.figure()
-plt.plot(x_stress,Sy_plot,'b',x_stress,Sy_list,'b')
-plt.show()
+# plt.figure()
+# plt.plot(x_stress,Sy_plot,'b',x_stress,Sy_list,'b')
 
 #Sy_plot=map(Sy, la/range(100))
 x_stress = list(x_stress)
@@ -235,7 +235,7 @@ x_stress = list(x_stress)
 #plt.plot(x_stress, Sy_plot)
 print(max(Sy_plot), x_stress[Sy_plot.index(max(Sy_plot))])
 print(max(Sz_plot), x_stress[Sz_plot.index(max(Sz_plot))])
-print(max(S_sum), x_stress[S_sum.index(max(S_sum))])
+# print(max(S_sum), x_stress[S_sum.index(max(S_sum))])
 #plt.plot(x_stress, Sz_plot)
 
 plt.figure( figsize = (16,9))
@@ -257,7 +257,7 @@ plt.show()
 
 
 plt.figure( figsize = (16,9))
-plt.grid
+plt.grid()
 plt.subplot(121)
 plt.subplot(121).set_xlim(0,la)
 plt.plot(x_stress, w_plot, 'k', x_stress, defl_z, 'b')
@@ -274,7 +274,7 @@ plt.tight_layout()
 plt.show()
 
 plt.figure( figsize = (16,9))
-plt.grid
+plt.grid()
 plt.subplot(121)
 plt.subplot(121).set_xlim(0,la)
 plt.plot(x_stress, phi_plot)

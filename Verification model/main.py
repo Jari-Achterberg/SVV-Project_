@@ -61,6 +61,7 @@ _ = crosssection.ysc                 # y-coordinate of the centroid
 _ = crosssection.zsc                 # z-coordinate of the centroid
 _ = crosssection.J                   # torsional constant
 
+print(crosssection.J)
 ######################## Part IV - Deflection calculations #######################################
 ### Definition of additional parameters
 N = 20     # Number of basis functions to use in Rayleigh-Ritz method (total number of coefficients is 3*N)
