@@ -10,14 +10,14 @@ def integral(x1, x2, y1, y2):
     b = y1-((y2-y1)/(x2-x1))*x1
 
     # Integration scheme for f(x)=ax+b
-    intaxbvar = (a/2)*(x2**2 - x1**2) + b*(x2-x1)
+    int_axb = (a/2)*(x2**2 - x1**2) + b*(x2-x1)
     # should be similar to: (y1 + y2)*(x2 - x1)/2
 
     # Integration scheme for f(x)=(ax+b)*x
     xh = 0.17679203  # distance from shear center
-    intxaxbvar = (1/3)*a*(x2**3 - x1**3) + 0.5*(b-a*xh)*(x2**2-x1**2) - b*xh*(x2-x1)
+    int_x_axb = (1/3)*a*(x2**3 - x1**3) + 0.5*(b-a*xh)*(x2**2-x1**2) - b*xh*(x2-x1)
 
-    return intaxbvar, intxaxbvar
+    return int_axb, int_x_axb
 
 
 '''
@@ -27,10 +27,10 @@ def double_integral(x1, x2, y1, y2):
     b = y1-((y2-y1)/(x2-x1))*x1
 
     # Integration scheme for f(x)=ax+b
-    intaxbvar = (a/6)*(x2**3 - x1**3) + (b/2)*(x2**2-x1**2)
+    int_axb_var = (a/6)*(x2**3 - x1**3) + (b/2)*(x2**2-x1**2)
     # should be similar to: (y1 + y2)*(x2 - x1)/2
 
-    return intaxbvar
+    return int_axb_var
 
 
 def triple_integral(x1, x2, y1, y2):
@@ -39,10 +39,10 @@ def triple_integral(x1, x2, y1, y2):
     b = y1 - ((y2 - y1) / (x2 - x1)) * x1
 
     # Integration scheme for f(x)=ax+b
-    intaxbvar = (a / 24) * (x2 ** 4 - x1 ** 4) + (b / 6) * (x2 ** 3 - x1 ** 3)
+    int_axb_var = (a / 24) * (x2 ** 4 - x1 ** 4) + (b / 6) * (x2 ** 3 - x1 ** 3)
     # should be similar to: (y1 + y2)*(x2 - x1)/2
 
-    return intaxbvar
+    return int_axb_var
 
 
 def quadruple_integral(x1, x2, y1, y2):
@@ -51,10 +51,10 @@ def quadruple_integral(x1, x2, y1, y2):
     b = y1 - ((y2 - y1) / (x2 - x1)) * x1
 
     # Integration scheme for f(x)=ax+b
-    intaxbvar = (a / 120) * (x2 ** 5 - x1 ** 5) + (b / 24) * (x2 ** 4 - x1 ** 4)
+    int_axb_var = (a / 120) * (x2 ** 5 - x1 ** 5) + (b / 24) * (x2 ** 4 - x1 ** 4)
     # should be similar to: (y1 + y2)*(x2 - x1)/2
 
-    return intaxbvar
+    return int_axb_var
 '''
 
 index = 0
@@ -129,8 +129,8 @@ length = x_list[-1] - x_list[0]
 print(x_list[0], x_list[-1])
 print(length)
 # print("length: ", len(x_list))
-stepsize = length/steps
-print("saaaa",stepsize)
+step_size = length / steps
+print("step size: ", step_size)
 # define func list
 moment_I, moment_II, torque_I = 0, 0, 0
 moment_II_list, torque_I_list = [], []
@@ -139,7 +139,7 @@ x_step_list = []
 for i in range(steps):
     # first find x in list:
     # x value is step size times i ?? VERIFY
-    x_value = stepsize*i + x_list[0]
+    x_value = step_size * i + x_list[0]
     x_step_list.append(x_value)
     for idx, elem in enumerate(x_list):
         if elem > x_value:
@@ -152,10 +152,10 @@ for i in range(steps):
     # calculate new force and moment using the current dist func
     # force is basically the term that is needed for Sy
     # moment is Mz
-    force = force + dist*stepsize
-    moment = moment + force*stepsize - dist*stepsize*stepsize/2
-    moment_I += moment*stepsize
-    moment_II += moment_I*stepsize
+    force = force + dist * step_size
+    moment = moment + force * step_size - dist * step_size * step_size / 2
+    moment_I += moment * step_size
+    moment_II += moment_I * step_size
 
     # append them to a list
     force_list.append(force)
@@ -166,13 +166,13 @@ for i in range(steps):
     s, t = func_list_torque[func_idx]
     dist2 = s*x_value + t
     # same procedure, f
-    torque += dist2*stepsize
-    torque_I += torque*stepsize
+    torque += dist2 * step_size
+    torque_I += torque * step_size
     torque_list.append(torque)
     torque_I_list.append(torque_I)
 
-filename = 'aeroloading_737'
-saveObject = (force_list, moment_list, torque_list, moment_II_list, torque_I_list, stepsize)
+filename = 'aeroloading'
+saveObject = (force_list, moment_list, torque_list, moment_II_list, torque_I_list, step_size)
 with open(filename, "wb") as f:
     pickle.dump(saveObject, f)    
     
