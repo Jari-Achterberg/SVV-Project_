@@ -106,13 +106,16 @@ def T_q_II(x):
     T_q_II = torque_I_list[index]
     return T_q_II
 
-# =================Geometrical properties of airfoil================
-eta = 0.17679203  # Shear center, input correct one or call function here.
-Iyy = 3.6906194387807746*10**-5                       # Preliminary values for MoI, input correct values or call functions here.
-Izz = 5.81593895759915*10**-6 # Value from verification model
-# J= 0.05176# [m^4]
-J = 2.3*10**-5
 
+# =================Geometrical properties of airfoil================
+# eta = 0.17679203  # Shear center, input correct one or call function here.
+eta = 0.09185594953325857
+# Iyy = 3.6906194387807746*10**-5                       # Preliminary values for MoI, input correct values or call functions here.
+Iyy = 4.363276766019503*10**-5
+Izz = 5.81593895759915*10**-6  # Value from verification model
+# J= 0.05176# [m^4]
+# J = 2.3*10**-5
+J = 8.629971582027012*10**-6
 # ========================================================================
 # =========== Solve Reaction forces, moments and deflections:  =========== 
 # ========================================================================
@@ -120,7 +123,7 @@ J = 2.3*10**-5
 x_I     = x2-xa/2
 x_II    = x2+xa/2
 z_h     = eta-ha/2
-
+# z_h = 0.09185594953325857
 # ================= Linear System Solver ===========================
 # Set up Linear System:
 A       = np.zeros((12, 12))
@@ -138,7 +141,7 @@ B       = np.zeros((12))
 
 
 v_left       = lambda X : -1/(E*Izz)  *  np.array([-1/6*MC(X, x1, 3), 0, -1/6*MC(X, x2, 3), 0, -1/6*MC(X, x3, 3), 0, -m.sin(theta)/6*MC(X, x_I, 3), X, 1, 0, 0, 0])
-v_right      = lambda X : -1/(E*Izz)  *  (M_qII(X) + 1/6*MC(X, x_II, 3)*P*m.sin(theta)/6)
+v_right      = lambda X : -1/(E*Izz)  *  (M_qII(X) + 1/6*MC(X, x_II, 3)*P*m.sin(theta))
 
 
 w_left      = lambda X : -1/(E*Iyy)  *  np.array([0,1/6*MC(X, x1, 3), 0, 1/6*MC(X, x2, 3), 0, 1/6*MC(X, x3, 3), -m.cos(theta)/6*MC(X, x_I, 3), 0, 0, X, 1, 0])
@@ -216,8 +219,8 @@ for xi in x_stress:
     T_plot.append(T(xi))
     My_plot.append(My(xi))
     Mz_plot.append(Mz(xi))
-    v_plot.append(-v(xi)*np.cos(26 / 180 * np.pi) + w(xi)*np.sin(26 / 180 * np.pi))
-    w_plot.append(w(xi)*np.cos(26 / 180 * np.pi)-v(xi)*np.sin(26 / 180 * np.pi))
+    v_plot.append(-v(xi)) # *np.cos(26 / 180 * np.pi) + w(xi)*np.sin(26 / 180 * np.pi))
+    w_plot.append(w(xi)) # *np.cos(26 / 180 * np.pi)-v(xi)*np.sin(26 / 180 * np.pi))
     phi_plot.append(phi(xi))
 
 filename='forces_moment_verification'
