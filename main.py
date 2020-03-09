@@ -156,8 +156,8 @@ T_left      = lambda X :                     np.array([z_h*MC(X, x1, 0), 0, -z_h
 T_right      = lambda X :                             (- P*(m.sin(theta)*eta*MC(X, x_II, 0) - m.cos(theta)*ha/2*MC(X, x_II, 0)))
 # Unknowns  :  {vec} = [Ry1, Ry2, Ry3, Rz1, Rz2, Rz3, Cu_p0, Cu0, Cv_p0, Cv0, Ctheta0, Py_I, Pz_I]
 # Variables :  {var} = [Ry1, Rz1, Ry2, Rz2, Ry3, Rz3, R_I, C1, C2, C3, C4, C5]
-My_left      = lambda X :                     np.array([0, MC(X, x1, 1), 0, MC(X, x2, 1), 0, MC(X, x3, 1), -m.cos(theta)*MC(X, x_I, 1), 0, 0, 0, 0, 0])
-My_right      = lambda X :                             (P*m.cos(theta)*MC(X, x_II, 1))
+My_left      = lambda X :                     np.array([0,- MC(X, x1, 1), 0, -MC(X, x2, 1), 0, -MC(X, x3, 1), m.cos(theta)*MC(X, x_I, 1), 0, 0, 0, 0, 0])
+My_right      = lambda X :                             (-P*m.cos(theta)*MC(X, x_II, 1))
 
 Mz_left      = lambda X :                     np.array([-MC(X, x1, 1), 0, -MC(X, x2, 1), 0, -MC(X, x3, 1), 0,  -m.sin(theta)*MC(X, x_I, 1), 0, 0, 0, 0, 0])
 Mz_right      = lambda X :                             (P*m.sin(theta)*MC(X, x_II, 1) + M_q(X))
