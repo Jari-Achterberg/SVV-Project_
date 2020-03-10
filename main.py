@@ -185,6 +185,8 @@ A[10, :],B[0]   = w_left(x3)                             , d3*m.sin(theta) - w_r
 # Row 12    :  Jammed Actuator Deflection Constraint
 A[11, :],B[11]   = m.sin(theta)*(v_left(x_I) - phi_left(x_I) * eta) - m.cos(theta)*(w_left(x_I) - phi_left(x_I)*ha/2)    ,   0 - m.sin(theta)*(v_right(x_I) - phi_right(x_I) * eta) - m.cos(theta)*(w_right(x_I) - phi_right(x_I)*ha/2)
 
+# d1*m.sin(theta)
+# d3*m.sin(theta)
 # Solve for A {var} = B
 #var = sp.sparse.linalg.spsolve(A, B)
 var = np.linalg.solve(A, B)
@@ -219,15 +221,16 @@ for xi in x_stress:
     T_plot.append(T(xi))
     My_plot.append(My(xi))
     Mz_plot.append(Mz(xi))
-    v_plot.append(-v(xi)) # *np.cos(26 / 180 * np.pi) + w(xi)*np.sin(26 / 180 * np.pi))
+    v_plot.append(v(xi)) # *np.cos(26 / 180 * np.pi) + w(xi)*np.sin(26 / 180 * np.pi))
     w_plot.append(w(xi)) # *np.cos(26 / 180 * np.pi)-v(xi)*np.sin(26 / 180 * np.pi))
     phi_plot.append(phi(xi))
 
-filename='forces_moment_verification'
+filename='testfile'
 with open(filename, "rb") as f:
     Sy_list,Sz_list,My_list,Mz_list,T_list,defl_y,defl_z = pickle.load(f)
     #kut = pickle.load(f)
-
+print(My_list)
+print(T_list)
 # Plotting results our own numerical model with results verification model
 # plt.figure()
 # plt.plot(x_stress,Sy_plot,'b',x_stress,Sy_list,'b')
