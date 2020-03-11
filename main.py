@@ -149,13 +149,13 @@ v_left = lambda X : -1/(E*Izz)  *  np.array([-1/6*MC(X, x1, 3), 0, -1/6*MC(X, x2
 v_right = lambda X : -1/(E*Izz)  *  (M_qII(X) + 1/6*MC(X, x_II, 3)*P*m.sin(theta))
 
 w_left      = lambda X : -1/(E*Iyy)  *  np.array([0,1/6*MC(X, x1, 3), 0, 1/6*MC(X, x2, 3), 0, 1/6*MC(X, x3, 3), -m.cos(theta)/6*MC(X, x_I, 3), 0, 0, X, 1, 0])
-w_right       = lambda X : -1/(E*Iyy)*         (1/6*MC(X, x_II, 3)*P*m.cos(theta))
+w_right       = lambda X : -1/(E*Iyy)*         (1/6*MC(X, x_II, 3)*P*m.cos(theta)+ T_q(X))
 
 phi_left   = lambda X : 1/(G*J)           * np.array([(z_h)*MC(X, x1, 1), 0, (z_h)*MC(X, x2, 1), 0, z_h*MC(X, x3, 1), 0, m.sin(theta)*eta*MC(X, x_I, 1)-m.cos(theta)*ha/2*MC(X, x_I, 1), 0, 0, 0, 0, 1])
-phi_right   = lambda X : 1/(G*J)           *         (-P*(m.sin(theta)*eta*MC(X, x_II, 1)  - m.cos(theta)*ha/2*MC(X, x_II, 1))   + T_q_II(X))
+phi_right   = lambda X : 1/(G*J)           *         (P*(m.sin(theta)*eta*MC(X, x_II, 1)  - m.cos(theta)*ha/2*MC(X, x_II, 1))   + T_q_II(X))
 
 T_left      = lambda X :                     np.array([z_h*MC(X, x1, 0), 0, z_h*MC(X, x2, 0), 0, z_h*MC(X, x3, 0), 0, m.sin(theta)*eta*MC(X, x_I, 0)-m.cos(theta)*ha/2*MC(X, x_I, 0), 0, 0, 0, 0, 0])
-T_right      = lambda X :                             (-P*(m.sin(theta)*eta*MC(X, x_II, 0) - m.cos(theta)*ha/2*MC(X, x_II, 0)))
+T_right      = lambda X :                             (P*(m.sin(theta)*eta*MC(X, x_II, 0) - m.cos(theta)*ha/2*MC(X, x_II, 0)) + T_q(X))
 # Unknowns  :  {vec} = [Ry1, Ry2, Ry3, Rz1, Rz2, Rz3, Cu_p0, Cu0, Cv_p0, Cv0, Ctheta0, Py_I, Pz_I]
 # Variables :  {var} = [Ry1, Rz1, Ry2, Rz2, Ry3, Rz3, R_I, C1, C2, C3, C4, C5]
 My_left      = lambda X :                     np.array([0, MC(X, x1, 1), 0, MC(X, x2, 1), 0, MC(X, x3, 1), -m.cos(theta)*MC(X, x_I, 1), 0, 0, 0, 0, 0])
@@ -182,8 +182,8 @@ A[8, :],B[8]    = w_left(x2)                             , - w_right(x2)
 A[9, :],B[9]    = v_left(x3) + phi_left(x3)*z_h                             , d3*m.cos(theta) - v_right(x3) - phi_right(x3)*z_h
 A[10, :],B[10]   = w_left(x3)                             , d3*m.sin(theta) - w_right(x3)
 # Row 12    :  Jammed Actuator Deflection Constraint
-A[11, :],B[11]   = m.sin(theta)*(v_left(x_I) - phi_left(x_I) * eta) - m.cos(theta)*(w_left(x_I) - phi_left(x_I)*ha/2)    ,   0 - m.sin(theta)*(v_right(x_I) - phi_right(x_I) * eta) - m.cos(theta)*(w_right(x_I) - phi_right(x_I)*ha/2)
-
+A[11, :],B[11]   = m.sin(theta)*(v_left(x_I) + phi_left(x_I) * eta) + m.cos(theta)*(w_left(x_I))    ,   0 - m.sin(theta)*(v_right(x_I) + phi_right(x_I) * eta) - m.cos(theta)*(w_right(x_I))
+#A[11, :],B[11] = phi_left(0),0.00157 -phi_right(0)
 # d1*m.sin(theta)
 # d3*m.sin(theta)
 # Solve for A {var} = B
@@ -212,12 +212,12 @@ Sy_plot, Sz_plot, My_plot, Mz_plot, T_plot, v_plot, w_plot, phi_plot = [], [], [
 for xi in x_stress:
     Sy_plot.append(Sy(xi))
     Sz_plot.append(Sz(xi))
-    T_plot.append(T(xi))
-    My_plot.append(My(xi))
+    T_plot.append(-T(xi))
+    My_plot.append(-My(xi))
     Mz_plot.append(Mz(xi))
     v_plot.append(v(xi))  # *np.cos(26 / 180 * np.pi) + w(xi)*np.sin(26 / 180 * np.pi))
     w_plot.append(w(xi))  # *np.cos(26 / 180 * np.pi)-v(xi)*np.sin(26 / 180 * np.pi))
-    phi_plot.append(phi(xi))
+    phi_plot.append(-phi(xi))
 
 filename='testfile'
 with open(filename, "rb") as f:
