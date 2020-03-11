@@ -180,7 +180,7 @@ A[7, :],B[7]    = v_left(x2) + phi_left(x2)*z_h                             , - 
 A[8, :],B[8]    = w_left(x2)                             , - w_right(x2)
 # Rows 10-11:  Hinge 3 Deflection Constraints
 A[9, :],B[9]    = v_left(x3) + phi_left(x3)*z_h                             , d3*m.cos(theta) - v_right(x3) - phi_right(x3)*z_h
-A[10, :],B[0]   = w_left(x3)                             , d3*m.sin(theta) - w_right(x3)
+A[10, :],B[10]   = w_left(x3)                             , d3*m.sin(theta) - w_right(x3)
 # Row 12    :  Jammed Actuator Deflection Constraint
 A[11, :],B[11]   = m.sin(theta)*(v_left(x_I) - phi_left(x_I) * eta) - m.cos(theta)*(w_left(x_I) - phi_left(x_I)*ha/2)    ,   0 - m.sin(theta)*(v_right(x_I) - phi_right(x_I) * eta) - m.cos(theta)*(w_right(x_I) - phi_right(x_I)*ha/2)
 
@@ -204,7 +204,8 @@ V  = lambda x: m.cos(theta)*(v(x) + phi(x)*z_h) + m.sin(theta)*(w(x)+ha/2*phi(x)
 Sy = lambda X : - R1y*MC(X,x1,0) - R2y*MC(X,x2,0) - R3y*MC(X,x3,0) - R_I*m.sin(theta)*MC(X,x_I,0) + P*m.sin(theta)*MC(X,x_II,0) + V_q(X)
 Sz = lambda X : R1z*MC(X,x1,0)+  R2z*MC(X,x2,0)+ R3z*MC(X,x3,0) -R_I*m.cos(theta)*MC(X,x_I,0) + P*m.cos(theta)*MC(X,x_II,0)  
 
-
+print(w(x3))
+print(d3*m.sin(theta))
 x_stress = np.linspace(0, la, 100) 
 Sy_plot, Sz_plot, My_plot, Mz_plot, T_plot, v_plot, w_plot, phi_plot = [], [], [], [], [], [], [], []
 
@@ -222,6 +223,7 @@ filename='testfile'
 with open(filename, "rb") as f:
     Sy_list, Sz_list, My_list, Mz_list, T_list, defl_y, defl_z = pickle.load(f)
 
+defl_z = -defl_z
 # Plotting results our own numerical model with results verification model
 # plt.figure()
 # plt.plot(x_stress,Sy_plot,'b',x_stress,Sy_list,'b')
