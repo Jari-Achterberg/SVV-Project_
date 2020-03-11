@@ -104,9 +104,9 @@ def T_q_II(x):
     index = round(x / stepsize)
     index = int(index)
     
-    if x<0.0012404325495737286:
+    if x < 0.0012404325495737286:
         index = 0
-    if x>1.6897595674504262:
+    if x > 1.6897595674504262:
         index = -1
     T_q_II = torque_I_list[index]
     return T_q_II
@@ -115,7 +115,8 @@ def T_q_II(x):
 # =================Geometrical properties of airfoil================
 # eta = 0.17679203  # Shear center, input correct one or call function here.
 eta = 0.09185594953325857
-# Iyy = 3.6906194387807746*10**-5                       # Preliminary values for MoI, input correct values or call functions here.
+# Iyy = 3.6906194387807746*10**-5
+# Preliminary values for MoI, input correct values or call functions here.
 Iyy = 4.363276766019503*10**-5
 Izz = 5.81593895759915*10**-6  # Value from verification model
 # J= 0.05176# [m^4]
@@ -125,14 +126,14 @@ J = 8.629971582027012*10**-6
 # =========== Solve Reaction forces, moments and deflections:  =========== 
 # ========================================================================
 # Additional Parameters:
-x_I     = x2-xa/2
-x_II    = x2+xa/2
-z_h     = eta-ha/2
+x_I = x2-xa/2
+x_II = x2+xa/2
+z_h = eta-ha/2
 # z_h = 0.09185594953325857
 # ================= Linear System Solver ===========================
 # Set up Linear System:
-A       = np.zeros((12, 12))
-B       = np.zeros((12))
+A = np.zeros((12, 12))
+B = np.zeros((12))
 
 # Variables :  {var} = [R1y, R1z, R2y, R2z, R3y, R3z, R_I, C1, C2, C3, C4, C5]
 
@@ -144,18 +145,14 @@ B       = np.zeros((12))
 # that are not affected by an unknown variable, ie: u({vec},x) = u_left({vec},x) + u_right(x).
 # On the right side are the non-homogeneous terms (known scalars) from your compatibility/boundary equations.
 
-
-v_left       = lambda X : -1/(E*Izz)  *  np.array([-1/6*MC(X, x1, 3), 0, -1/6*MC(X, x2, 3), 0, -1/6*MC(X, x3, 3), 0, -m.sin(theta)/6*MC(X, x_I, 3), X, 1, 0, 0, 0])
-v_right      = lambda X : -1/(E*Izz)  *  (M_qII(X) + 1/6*MC(X, x_II, 3)*P*m.sin(theta))
-
+v_left = lambda X : -1/(E*Izz)  *  np.array([-1/6*MC(X, x1, 3), 0, -1/6*MC(X, x2, 3), 0, -1/6*MC(X, x3, 3), 0, -m.sin(theta)/6*MC(X, x_I, 3), X, 1, 0, 0, 0])
+v_right = lambda X : -1/(E*Izz)  *  (M_qII(X) + 1/6*MC(X, x_II, 3)*P*m.sin(theta))
 
 w_left      = lambda X : -1/(E*Iyy)  *  np.array([0,1/6*MC(X, x1, 3), 0, 1/6*MC(X, x2, 3), 0, 1/6*MC(X, x3, 3), -m.cos(theta)/6*MC(X, x_I, 3), 0, 0, X, 1, 0])
 w_right       = lambda X : -1/(E*Iyy)*         (1/6*MC(X, x_II, 3)*P*m.cos(theta))
-                                                                             
 
 phi_left   = lambda X : 1/(G*J)           * np.array([(z_h)*MC(X, x1, 1), 0, (z_h)*MC(X, x2, 1), 0, z_h*MC(X, x3, 1), 0, -m.cos(theta)*ha/2*MC(X, x_I, 1), 0, 0, 0, 0, 1])
 phi_right   = lambda X : 1/(G*J)           *         (P*(m.sin(theta)*eta*MC(X, x_II, 1)  - m.cos(theta)*ha/2*MC(X, x_II, 1))   + T_q_II(X))
-
 
 T_left      = lambda X :                     np.array([z_h*MC(X, x1, 0), 0, -z_h*MC(X, x2, 0), 0, -z_h*MC(X, x3, 0), 0, m.sin(theta)*eta*MC(X, x_I, 0)-m.cos(theta)*ha/2*MC(X, x_I, 0), 0, 0, 0, 0, 0])
 T_right      = lambda X :                             (- P*(m.sin(theta)*eta*MC(X, x_II, 0) - m.cos(theta)*ha/2*MC(X, x_II, 0)))
@@ -190,10 +187,10 @@ A[11, :],B[11]   = m.sin(theta)*(v_left(x_I) - phi_left(x_I) * eta) - m.cos(thet
 # d1*m.sin(theta)
 # d3*m.sin(theta)
 # Solve for A {var} = B
-#var = sp.sparse.linalg.spsolve(A, B)
+# var = sp.sparse.linalg.spsolve(A, B)
 var = np.linalg.solve(A, B)
 R1y, R1z, R2y, R2z, R3y, R3z, R_I, C1, C2, C3, C4, C5 = var       
-#---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 #     =====================Set up Moment, Shear and deflection equations=======================
  
 T = lambda x:      np.sum(T_left(x)*var)         + T_right(x)
