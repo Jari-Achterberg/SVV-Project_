@@ -151,11 +151,11 @@ v_right = lambda X : -1/(E*Izz)  *  (M_qII(X) + 1/6*MC(X, x_II, 3)*P*m.sin(theta
 w_left      = lambda X : -1/(E*Iyy)  *  np.array([0,1/6*MC(X, x1, 3), 0, 1/6*MC(X, x2, 3), 0, 1/6*MC(X, x3, 3), -m.cos(theta)/6*MC(X, x_I, 3), 0, 0, X, 1, 0])
 w_right       = lambda X : -1/(E*Iyy)*         (1/6*MC(X, x_II, 3)*P*m.cos(theta))
 
-phi_left   = lambda X : 1/(G*J)           * np.array([(z_h)*MC(X, x1, 1), 0, (z_h)*MC(X, x2, 1), 0, z_h*MC(X, x3, 1), 0, -m.cos(theta)*ha/2*MC(X, x_I, 1), 0, 0, 0, 0, 1])
-phi_right   = lambda X : 1/(G*J)           *         (P*(m.sin(theta)*eta*MC(X, x_II, 1)  - m.cos(theta)*ha/2*MC(X, x_II, 1))   + T_q_II(X))
+phi_left   = lambda X : 1/(G*J)           * np.array([(z_h)*MC(X, x1, 1), 0, (z_h)*MC(X, x2, 1), 0, z_h*MC(X, x3, 1), 0, m.sin(theta)*eta*MC(X, x_I, 1)-m.cos(theta)*ha/2*MC(X, x_I, 1), 0, 0, 0, 0, 1])
+phi_right   = lambda X : 1/(G*J)           *         (-P*(m.sin(theta)*eta*MC(X, x_II, 1)  - m.cos(theta)*ha/2*MC(X, x_II, 1))   + T_q_II(X))
 
-T_left      = lambda X :                     np.array([z_h*MC(X, x1, 0), 0, -z_h*MC(X, x2, 0), 0, -z_h*MC(X, x3, 0), 0, m.sin(theta)*eta*MC(X, x_I, 0)-m.cos(theta)*ha/2*MC(X, x_I, 0), 0, 0, 0, 0, 0])
-T_right      = lambda X :                             (- P*(m.sin(theta)*eta*MC(X, x_II, 0) - m.cos(theta)*ha/2*MC(X, x_II, 0)))
+T_left      = lambda X :                     np.array([z_h*MC(X, x1, 0), 0, z_h*MC(X, x2, 0), 0, z_h*MC(X, x3, 0), 0, m.sin(theta)*eta*MC(X, x_I, 0)-m.cos(theta)*ha/2*MC(X, x_I, 0), 0, 0, 0, 0, 0])
+T_right      = lambda X :                             (-P*(m.sin(theta)*eta*MC(X, x_II, 0) - m.cos(theta)*ha/2*MC(X, x_II, 0)))
 # Unknowns  :  {vec} = [Ry1, Ry2, Ry3, Rz1, Rz2, Rz3, Cu_p0, Cu0, Cv_p0, Cv0, Ctheta0, Py_I, Pz_I]
 # Variables :  {var} = [Ry1, Rz1, Ry2, Rz2, Ry3, Rz3, R_I, C1, C2, C3, C4, C5]
 My_left      = lambda X :                     np.array([0,- MC(X, x1, 1), 0, -MC(X, x2, 1), 0, -MC(X, x3, 1), m.cos(theta)*MC(X, x_I, 1), 0, 0, 0, 0, 0])
@@ -223,6 +223,9 @@ filename='testfile'
 with open(filename, "rb") as f:
     Sy_list, Sz_list, My_list, Mz_list, T_list, defl_y, defl_z = pickle.load(f)
 
+flname='twist'
+with open(flname,'rb') as g:
+    twist = pickle.load(g)
 defl_z = -defl_z
 # Plotting results our own numerical model with results verification model
 # plt.figure()
@@ -275,7 +278,7 @@ plt.figure(figsize=(16/1.3, 9/1.3))
 plt.grid()
 plt.subplot(121)
 plt.subplot(121).set_xlim(0, la)
-plt.plot(x_stress, phi_plot)
+plt.plot(x_stress, phi_plot, 'k', x_stress, twist, 'b')
 # plt.title('S')
 plt.xlabel('x - Position [m]')
 plt.ylabel('Twist angle $\phi$ [m]')
